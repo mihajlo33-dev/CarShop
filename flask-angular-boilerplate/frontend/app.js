@@ -7,6 +7,10 @@ var app = angular.module('appTitleGoesHere', [], function ($routeProvider, $loca
         .when('/preview/:id', { templateUrl: "./views/note_preview.html", controller: "PreviewController" })
         .when('/edit/:id', { templateUrl: "./views/note_form.html", controller: "NoteModifyController" })
         .when('/create', { templateUrl: "./views/note_form.html", controller: "NoteCreateController" })
+        .when('/preview/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewController"})
+        .when('/edit/:id', {templateUrl:"./views/brand_form.html", controller:"BrandModifyController"})
+        .when('/create', { templateUrl: "./views/brand_form.html", controller: "BrandCreateController" })
+        .when('/brand', { templateUrl: "./views/defaultBrand.html", controller: "DefController" })
         .otherwise({ redirectTo: "/" });
 
     $locationProvider.html5Mode(false);
@@ -24,12 +28,15 @@ function MainCtrl($scope, $route, $routeParams, $navigate, $location) {
 }
 
 // home page controller (shows all the notes in the database)
-app.controller('DefController', function ($scope, $navigate, $notes, $timeout) {
+app.controller('DefController', function ($scope, $navigate, $notes, $timeout,$brands) {
     $scope.notes = [];
     $scope.filterText = "";
     $scope.init = function() {
         $notes.get($scope.filterText).then(function(result) {
             $scope.notes = result;
+        });
+        $brands.get($scope.filterText).then(function(result) {
+            $scope.brands = result;
         });
     }
 
@@ -68,11 +75,14 @@ app.controller('DefController', function ($scope, $navigate, $notes, $timeout) {
 });
 
 // preview for a single note
-app.controller('PreviewController', function ($scope, $navigate, $notes, $routeParams) {
+app.controller('PreviewController', function ($scope, $navigate, $notes, $routeParams,$brands) {
     $scope.note = {};
     $scope.init = function() {
         $notes.getById($routeParams.id).then(function(result) {
             $scope.note = result;
+        });
+        $brands.getById($routeParams.id).then(function(result) {
+            $scope.brand = result;
         });
     }
 
@@ -115,13 +125,16 @@ app.controller('NoteCreateController', function ($scope, $navigate, $notes) {
 });
 
 // form for modifying notes
-app.controller('NoteModifyController', function ($scope, $navigate, $notes, $routeParams) {
+app.controller('NoteModifyController', function ($scope, $navigate, $notes, $routeParams,$brands) {
     $scope.note = {};
     $scope.isEdit = true;
 
     $scope.init = function() {
         $notes.getById($routeParams.id).then(function(result) {
             $scope.note = result;
+        });
+        $brands.getById($routeParams.id).then(function(result) {
+            $scope.brand = result;
         });
     }
 

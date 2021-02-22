@@ -1,0 +1,11 @@
+<div ng-init="init()" class="card card bg-dark text-white">
+    <img class="card-img-top"
+        src="https://vistapointe.net/images/ribblehead-viaduct-wallpaper-7.jpg">
+    <div class="card-body preview-card">
+        <h5 class="card-title">{{ brand.brandId }}</h5>
+        <p class="card-text">{{ brand.brandNAme }}</p>
+        <a ng-click="deleteNote(brand.brandId)" class="card-link text-danger hover">Delete</a>
+        <a ng-click="modifyNote(brand.brandId)" class="card-link text-info hover">Modify</a>
+        <a ng-click="goBack(brand)" class="card-link text-primary hover">Go back</a>
+    </div>
+</div>
