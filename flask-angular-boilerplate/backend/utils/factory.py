@@ -1,27 +1,17 @@
-  
 import os
 import sys
 from flask import Flask, send_from_directory, request, jsonify, render_template
-
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-
-
 
 
 def create_app(config):
     project_root = os.path.dirname(__file__)
     template_path = os.path.join(project_root, './')
 
-
     app = Flask(__name__, static_folder='./../../frontend',template_folder=template_path)
     app.config.from_object(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:mihajlo@localhost/car'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test'
     CORS(app)
-    db = SQLAlchemy(app)
-    db.create_all()
-
-
 
     @app.after_request
     def add_header(response):
@@ -31,10 +21,6 @@ def create_app(config):
     def heartbeat():
         return jsonify(message="It's working")
 
-
-    @app.route('/about')
-    def about():
-        return "<h1>About Page</h1>"
 
 
     @app.route('/', defaults={'path': ''})

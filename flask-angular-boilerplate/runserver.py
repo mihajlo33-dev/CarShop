@@ -1,8 +1,6 @@
-from backend.utils.factory import create_app
+from backend.factory import create_app
+from backend.config import Config
 import os
-
-class Config(object):
-    DEBUG = False
 
 if __name__ == '__main__':
         app = create_app(Config)

@@ -1,0 +1,13 @@
+<form ng-init="init()">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Title</label>
+        <input type="text" class="form-control" placeholder="Enter title" ng-model="note.Title">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Description</label>
+        <textarea class="form-control" placeholder="Enter description" ng-model="note.Description"></textarea>
+    </div>
+    <button ng-click="submit()" type="submit" class="btn btn-primary">Submit</button>
+    <a style="margin-left: 20px" ng-click="goBack(note)" class="card-link text-primary hover">Go back</a>
+    <a ng-if="isEdit" ng-click="deleteNote(note.Id)" class="card-link text-danger hover">Delete</a>
+</form>
