@@ -3,7 +3,7 @@ import os
 import sys
 from flask import Flask, send_from_directory, request, jsonify, render_template
 from flask_cors import CORS
-from .routes import noteRoutes,brandRoutes
+from .routes import noteRoutes,brandRoutes,modelsRoutes
 from .config import DB_URI
 
 def create_app(config):
@@ -21,6 +21,8 @@ def create_app(config):
     # adding blueprint is a set of subroutes for specific models (in this case for notes)
     app.register_blueprint(noteRoutes)
     app.register_blueprint(brandRoutes)
+    app.register_blueprint(modelsRoutes)
+
 
 
     # heartbeat route (test if the app works correctly by going to 'localhost:5000/api/heartbeat')

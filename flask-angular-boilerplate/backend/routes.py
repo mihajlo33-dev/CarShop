@@ -1,12 +1,13 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import select, delete
-from .models import brand
+from .models import brand,models
 from .methods import sqlExe, sqlAction, validateFields
 from datetime import datetime
 
 # notes Bluebrint (all the routes that are used for the notes model - they use the /api/note prefix)
 noteRoutes = Blueprint("notes", __name__, url_prefix='/api/note')
 brandRoutes = Blueprint("brand", __name__, url_prefix='/api/brand')
+modelsRoutes = Blueprint("models", __name__, url_prefix='/api/models')
 
 
 
@@ -23,7 +24,7 @@ def get_brands():
         get_multiple = False
 
     elif request.get_json().get("brandNameFilter", False):
-        search_text = "".join(("%", request.get_json()["brandNAmeFilter"], "%"))
+        search_text = "".join(("%", request.get_json()["brandNameFilter"], "%"))
         query = query.where(brand.c.brandId.like(search_text))
 
     result = sqlExe(query, multiple=get_multiple)
@@ -70,6 +71,67 @@ def delete_brand(brandId):
     result = sqlAction(query)
 
     return jsonify(success=True)
+
+
+@modelsRoutes.route('/get', methods=["POST"])
+def get_models():
+    query = select([models.c.modelsId, models.c.modelName])
+    get_multiple = True
+
+    if request.get_json().get("modelsId", False):
+        modelsId = request.get_json()["modelsId"]
+        query = query.where(models.c.modelsId == modelsId)
+        get_multiple = False
+
+    elif request.get_json().get("modelNameFilter", False):
+        search_text = "".join(("%", request.get_json()["modelNameFilter"], "%"))
+        query = query.where(models.c.modelsId.like(search_text))
+
+    result = sqlExe(query, multiple=get_multiple)
+
+    return jsonify(result)
+
+
+@modelsRoutes.route('/create', methods=["POST"])
+def create_models():
+    data = request.get_json()
+
+    if not validateFields(data, ["modelName"]):
+        return jsonify(success=False, message="Invalid form data")
+
+    data = {
+        "modelName": data["modelName"]
+
+    }
+
+    query = models.insert().values(data)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+@modelsRoutes.route('/modify/<modelsId>', methods=["POST"])
+def modify_models(modelsId):
+    data = request.get_json()
+
+    if not validateFields(data, ["modelName"]):
+        return jsonify(success=False, message="Invalid form data")
+
+    data = {
+        "modelName": data["modelName"],
+    }
+    query = models.update().values(data).where(models.c.modelsId==modelsId)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+
+@modelsRoutes.route('/delete/<modelsId>', methods=["POST"])
+def delete_models(modelsId):
+    query = delete(models).where(models.c.modelsId == modelsId)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
 
 @noteRoutes.route('/get', methods=["POST"])
 def get_notes():
