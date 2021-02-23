@@ -1,15 +1,16 @@
 <div ng-init="init()">
     <input class="form-control" ng-model="filterText" ng-change='filter()'
         placeholder="Search for specific note" style="margin-bottom: 5px" />
-    <button ng-click="createBrand()" type="button" class="btn btn-secondary" style="margin-bottom: 15px">Add new
-        brand</button>
+    <button ng-click="createNote()" type="button" class="btn btn-secondary" style="margin-bottom: 15px">Add new
+        note</button>
     <div ng-repeat="note in notes track by $index" class="card bg-dark text-white"
         style="width: 100%; margin-bottom: 10px">
         <div class="card-body">
-            <h5 class="card-title">{{ brand.brandName }}</h5>
-            <a ng-click="deleteBrand(brand.brandId)" class="card-link text-danger hover">Delete</a>
-            <a ng-click="modifyBrand(brand.brandId)" class="card-link text-info hover">Modify</a>
-            <a ng-click="previewNote(brand.brandId)" class="card-link text-primary hover">Preview</a>
+            <h5 class="card-title">{{ note.Title }}</h5>
+            <p class="card-text">{{ note.Description }}</p>
+            <a ng-click="deleteNote(note.Id)" class="card-link text-danger hover">Delete</a>
+            <a ng-click="modifyNote(note.Id)" class="card-link text-info hover">Modify</a>
+            <a ng-click="previewNote(note.Id)" class="card-link text-primary hover">Preview</a>
         </div>
     </div>
 </div>

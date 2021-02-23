@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import select, delete
-from .models import brand,models
+from .models import brand,models,fuel
 from .methods import sqlExe, sqlAction, validateFields
 from datetime import datetime
 
@@ -8,6 +8,9 @@ from datetime import datetime
 noteRoutes = Blueprint("notes", __name__, url_prefix='/api/note')
 brandRoutes = Blueprint("brand", __name__, url_prefix='/api/brand')
 modelsRoutes = Blueprint("models", __name__, url_prefix='/api/models')
+fuelRoutes = Blueprint("fuel", __name__, url_prefix='/api/fuel')
+
+
 
 
 
@@ -20,7 +23,7 @@ def get_brands():
 
     if request.get_json().get("brandId", False):
         brandId = request.get_json()["brandId"]
-        query = query.where(brand.c.brandIdId == brandId)
+        query = query.where(brand.c.brandId == brandId)
         get_multiple = False
 
     elif request.get_json().get("brandNameFilter", False):
@@ -131,6 +134,67 @@ def delete_models(modelsId):
     result = sqlAction(query)
 
     return jsonify(success=True)
+
+
+@fuelRoutes.route('/get',methods=["POST"])
+def get_fuel():
+    query = select([fuel.c.fuelId, fuel.c.fuel])
+    get_multiple = True
+
+    if request.get_json().get("fuelId", False):
+        fuelId = request.get_json()["fuelId"]
+        query = query.where(fuel.c.fuelId == fuelId)
+        get_multiple = False
+
+    elif request.get_json().get("fuelFilter", False):
+        search_text = "".join(("%", request.get_json()["fuelFilter"], "%"))
+        query = query.where(fuel.c.fuelId.like(search_text))
+
+    result = sqlExe(query, multiple=get_multiple)
+
+    return jsonify(result)
+
+
+@fuelRoutes.route('/create', methods=["POST"])
+def create_fuel():
+    data = request.get_json()
+
+    if not validateFields(data, ["fuel"]):
+        return jsonify(success=False, message="Invalid form data")
+
+    data = {
+        "fuel": data["fuel"]
+
+    }
+
+    query = fuel.insert().values(data)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+@fuelRoutes.route('/modify/<fuelId>', methods=["POST"])
+def modify_fuel(fuelId):
+    data = request.get_json()
+
+    if not validateFields(data, ["fuel"]):
+        return jsonify(success=False, message="Invalid form data")
+
+    data = {
+        "fuel": data["fuel"],
+    }
+    query = fuel.update().values(data).where(fuel.c.fuelId==fuelId)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+
+@fuelRoutes.route('/delete/<fuelId>', methods=["POST"])
+def delete_fuel(fuelId):
+    query = delete(fuel).where(fuel.c.fuelId == fuelId)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
 
 
 @noteRoutes.route('/get', methods=["POST"])

@@ -4,17 +4,21 @@
 var app = angular.module('appTitleGoesHere', [], function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/', { templateUrl: "./views/default.html", controller: "DefController" })
-        .when('/preview/:id', { templateUrl: "./views/note_preview.html", controller: "PreviewController" })
+        .when('/preview/:id', { templateUrl: "./views/note_preview.html", controller: "PreviewNoteController" })
         .when('/edit/:id', { templateUrl: "./views/note_form.html", controller: "NoteModifyController" })
         .when('/create', { templateUrl: "./views/note_form.html", controller: "NoteCreateController" })
-        .when('/preview/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewController"})
+        .when('/preview/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewBrandController"})
         .when('/edit/:id', {templateUrl:"./views/brand_form.html", controller:"BrandModifyController"})
         .when('/create', { templateUrl: "./views/brand_form.html", controller: "BrandCreateController" })
-        .when('/brand', { templateUrl: "./views/defaultBrand.html", controller: "DefController" })
-        .when('/preview/:id', {templateUrl:"./views/models_preview.html", controller:"PreviewController"})
+        .when('/brand', { templateUrl: "./views/defaultBrand.html", controller: "DefBrandController" })
+        .when('/preview/:id', {templateUrl:"./views/models_preview.html", controller:"PreviewModelsController"})
         .when('/edit/:id', {templateUrl:"./views/models_form.html", controller:"ModelsModifyController"})
         .when('/create', { templateUrl: "./views/models_form.html", controller: "ModelsCreateController" })
-        .when('/models', { templateUrl: "./views/defaultModels.html", controller: "DefController" })
+        .when('/models', { templateUrl: "./views/defaultModels.html", controller: "DefModelsController" })
+        .when('/preview/:id', {templateUrl:"./views/fuel_preview.html", controller:"PreviewFuelController"})
+        .when('/edit/:id', {templateUrl:"./views/fuel_form.html", controller:"FuelModifyController"})
+        .when('/create', { templateUrl: "./views/fuel_form.html", controller: "FuelCreateController" })
+        .when('/fuel', { templateUrl: "./views/defaultFuel.html", controller: "DefFuelController" })
         .otherwise({ redirectTo: "/" });
 
     $locationProvider.html5Mode(false);
@@ -281,6 +285,133 @@ app.controller('ModelModifyController', function ($scope, $navigate, $models, $r
         $navigate.goBack();
     }
 });
+
+// home page controller (shows all the fuel in the database)
+app.controller('DefFuelController', function ($scope, $navigate, $fuel, $timeout,) {
+    $scope.fuel = [];
+    $scope.filterText = "";
+    $scope.init = function() {
+        $notes.get($scope.filterText).then(function(result) {
+            $scope.fuel = result;
+        });
+    }
+
+    // timeout is used to avoid consant server calls (instead we use the debounce method)
+    var _timeout = null;
+    $scope.filter = function() {
+        if(_timeout) { // if there is already a timeout in process cancel it
+            $timeout.cancel(_timeout);
+        }
+        _timeout = $timeout(function() {
+            $scope.init();
+            _timeout = null;
+        }, 800);
+    }
+
+    $scope.createFuel = function() {
+        $navigate.goTo("/#/create");
+    }
+
+    $scope.modifyFuel = function(id) {
+        $navigate.goTo(["/#/edit/", id].join(""));
+    }
+
+    $scope.previewFuel = function(id) {
+        $navigate.goTo(["/#/preview/", id].join(""));
+    }
+
+    $scope.deleteFuel = function(id) {
+        if (confirm("Are you sure you want to delete this note?")) {
+            $fuel.delete(id).then(function(result) {
+                alert("Note was deleted")
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+});
+
+
+// preview for a single fuel
+app.controller('PreviewFuelController', function ($scope, $navigate, $fuel, $routeParams) {
+    $scope.fuel = {};
+    $scope.init = function() {
+        $fuel.getById($routeParams.id).then(function(result) {
+            $scope.fuel = result;
+        });
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+
+    $scope.modifyFuel = function(id) {
+        $navigate.goTo(["/#/edit/", id].join(""));
+    }
+
+    $scope.deleteFuel = function(id) {
+        if (confirm("Are you sure you want to delete this note?")) {
+            $fuel.delete(id).then(function(result) {
+                alert("Fuel was deleted");
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+});
+
+// form for creating fuel
+app.controller('FuelCreateController', function ($scope, $navigate, $fuel) {
+    $scope.init = function() {};
+    $scope.fuel = {
+        "fuel": "",
+    };
+
+    $scope.submit = function() {
+        $fuel.create($scope.fuel).then(function(result) {
+            alert("Fuel was created!");
+            $navigate.goTo("/#/");
+        })
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+});
+
+// form for modifying fuel
+app.controller('FuelModifyController', function ($scope, $navigate, $fuel, $routeParams) {
+    $scope.fuel = {};
+    $scope.isEdit = true;
+
+    $scope.init = function() {
+        $fuel.getById($routeParams.id).then(function(result) {
+            $scope.fuel = result;
+        });
+        $fuel.getById($routeParams.id).then(function(result) {
+            $scope.fuel = result;
+        });
+    }
+
+    $scope.deleteFuel = function(id) {
+        if (confirm("Are you sure you want to delete this note?")) {
+            $fuel.delete(id).then(function(result) {
+                alert("Fuel was deleted");
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+
+    $scope.submit = function() {
+        $fuel.modify($routeParams.id, $scope.fuel).then(function(result) {
+            alert("Fuel was updated!");
+            $navigate.goTo(["/#/preview/", $routeParams.id].join(""));
+        })
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+});
+
 
 
 // home page controller (shows all the notes in the database)

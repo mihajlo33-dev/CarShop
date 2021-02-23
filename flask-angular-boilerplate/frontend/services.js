@@ -45,7 +45,7 @@ app.service('$brand', function($http) {
     this.notes_api_uri = '/api/brand/';
     this.default_options = function(url_ending, data) {
         return {
-            url: [this.notes_api_uri, url_ending].join(""),
+            url: [this.brand_api_uri, url_ending].join(""),
             method: 'POST',
             data: data
         };
@@ -86,7 +86,48 @@ app.service('$models', function($http) {
     this.notes_api_uri = '/api/models/';
     this.default_options = function(url_ending, data) {
         return {
-            url: [this.notes_api_uri, url_ending].join(""),
+            url: [this.models_api_uri, url_ending].join(""),
+            method: 'POST',
+            data: data
+        };
+    }
+
+    this.get = function(titleFilter) {
+        return $http(this.default_options('get', {titleFilter: titleFilter})).then(function(response) {
+            return response.data;
+        });
+    };
+
+    this.create = function(data) {
+        return $http(this.default_options('create', data)).then(function(response) {
+            return response.data;
+        });
+    };
+
+    this.modify = function(id, data) {
+        return $http(this.default_options('modify/'+id, data)).then(function(response) {
+            return response.data;
+        });
+    };
+
+    this.delete = function(id) {
+        return $http(this.default_options('delete/'+id, {})).then(function(response) {
+            return response.data;
+        });
+    };
+
+    this.getById = function(id) {
+        return $http(this.default_options('get', {id: id})).then(function(response) {
+            return response.data;
+        });
+    }
+});
+
+app.service('$fuel', function($http) {
+    this.notes_api_uri = '/api/fuel/';
+    this.default_options = function(url_ending, data) {
+        return {
+            url: [this.fuel_api_uri, url_ending].join(""),
             method: 'POST',
             data: data
         };
