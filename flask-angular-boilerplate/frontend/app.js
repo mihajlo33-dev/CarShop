@@ -43,7 +43,7 @@ function MainCtrl($scope, $route, $routeParams, $navigate, $location) {
 
 // home page controller (shows all the brands in the database)
 app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brands) {
-    $scope.notes = [];
+    $scope.brand = $brand.get();
     $scope.filterText = "";
     $scope.init = function() {
         $brands.get($scope.filterText).then(function(result) {
@@ -88,7 +88,7 @@ app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brand
 
 // preview for a single brand
 app.controller('PreviewBrandController', function ($scope, $navigate, $routeParams,$brands) {
-    $scope.note = {};
+    $scope.brand = $brand.get();
     $scope.init = function() {
         $brands.getById($routeParams.id).then(function(result) {
             $scope.brand = result;
@@ -115,6 +115,7 @@ app.controller('PreviewBrandController', function ($scope, $navigate, $routePara
 
 // form for creating brands
 app.controller('BrandCreateController', function ($scope, $navigate,$brands) {
+    $scope.brand = $brand.get();
     $scope.init = function() {};
     $scope.note = {
         "brandName": ""
@@ -134,7 +135,7 @@ app.controller('BrandCreateController', function ($scope, $navigate,$brands) {
 
 // form for modifying brands
 app.controller('BrandModifyController', function ($scope, $navigate,$routeParams,$brands) {
-    $scope.note = {};
+    $scope.brand = $brand.get();
     $scope.isEdit = true;
 
     $scope.init = function() {
@@ -166,7 +167,7 @@ app.controller('BrandModifyController', function ($scope, $navigate,$routeParams
 
 // home page controller (shows all the models in the database)
 app.controller('DefModelController', function ($scope, $navigate,$timeout,$models) {
-    $scope.notes = [];
+    $scope.model = $models.get();
     $scope.filterText = "";
     $scope.init = function() {
         $models.get($scope.filterText).then(function(result) {
@@ -210,7 +211,7 @@ app.controller('DefModelController', function ($scope, $navigate,$timeout,$model
 
 // preview for a single model
 app.controller('PreviewModelController', function ($scope, $navigate, $routeParams,$models) {
-    $scope.model = {};
+    $scope.model = $models.get();
     $scope.init = function() {
         $models.getById($routeParams.id).then(function(result) {
             $scope.model = result;
@@ -238,6 +239,8 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
 
 // form for creating brands
 app.controller('ModelCreateController', function ($scope, $navigate,$models) {
+}
+    $scope.model = $models.get();
     $scope.init = function() {};
     $scope.note = {
         "brandName": ""
@@ -257,7 +260,7 @@ app.controller('ModelCreateController', function ($scope, $navigate,$models) {
 
 // form for modifying models
 app.controller('ModelModifyController', function ($scope, $navigate, $models, $routeParams) {
-    $scope.model = {};
+    $scope.model = $models.get();
     $scope.isEdit = true;
 
     $scope.init = function() {
@@ -292,7 +295,7 @@ app.controller('ModelModifyController', function ($scope, $navigate, $models, $r
 
 // home page controller (shows all the fuel in the database)
 app.controller('DefFuelController', function ($scope, $navigate, $fuel, $timeout,) {
-    $scope.fuel = [];
+    $scope.fuel = $fuel.get();
     $scope.filterText = "";
     $scope.init = function() {
         $notes.get($scope.filterText).then(function(result) {
@@ -337,7 +340,7 @@ app.controller('DefFuelController', function ($scope, $navigate, $fuel, $timeout
 
 // preview for a single fuel
 app.controller('PreviewFuelController', function ($scope, $navigate, $fuel, $routeParams) {
-    $scope.fuel = {};
+    $scope.fuel = $fuel.get();
     $scope.init = function() {
         $fuel.getById($routeParams.id).then(function(result) {
             $scope.fuel = result;
@@ -364,6 +367,8 @@ app.controller('PreviewFuelController', function ($scope, $navigate, $fuel, $rou
 
 // form for creating fuel
 app.controller('FuelCreateController', function ($scope, $navigate, $fuel) {
+}
+    $scope.fuel = $fuel.get();
     $scope.init = function() {};
     $scope.fuel = {
         "fuel": "",
@@ -383,7 +388,7 @@ app.controller('FuelCreateController', function ($scope, $navigate, $fuel) {
 
 // form for modifying fuel
 app.controller('FuelModifyController', function ($scope, $navigate, $fuel, $routeParams) {
-    $scope.fuel = {};
+    $scope.fuel = $fuel.get();
     $scope.isEdit = true;
 
     $scope.init = function() {

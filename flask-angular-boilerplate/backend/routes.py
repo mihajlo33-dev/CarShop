@@ -200,7 +200,7 @@ def delete_fuel(fuelId):
 
 @carRoutes.route('/get', methods=["POST"])
 def get_car():
-    query = select([car.c.carId, car.c.brand, car.c.model, car.c.year, car.c.price, car.c.fuel, car.c.reg, car.c.color,car.c.km])
+    query = select([car.c.carId, car.c.brandId, car.c.modelId, car.c.year, car.c.price, car.c.fuel, car.c.reg, car.c.color,car.c.km])
     get_multiple = True
 
     if request.get_json().get("id", False):
@@ -225,8 +225,8 @@ def create_car():
         return jsonify(success=False, message="Invalid form data")
 
     data = {
-        "brand": data["brand"],
-        "model": data["model"],
+        "brandId": data["brandId"],
+        "modelId": data["modelId"],
         "year": data["year"],
         "price": data["price"],
         "fuel": data["fuel"],
@@ -249,8 +249,8 @@ def modify_car(carId):
         return jsonify(success=False, message="Invalid form data")
 
     data = {
-        "brand": data["brand"],
-        "model": data["model"],
+        "brandId": data["brandId"],
+        "modelId": data["modelId"],
         "year": data["year"],
         "price": data["price"],
         "fuel": data["fuel"],
