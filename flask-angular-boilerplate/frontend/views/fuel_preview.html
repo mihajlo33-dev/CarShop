@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div ng-init="init()" class="card card bg-dark text-white">
+    <img class="card-img-top"
+        src="https://vistapointe.net/images/ribblehead-viaduct-wallpaper-7.jpg">
+    <div class="card-body preview-card">
+        <h5 class="card-title">{{ fuel.fuelId }}</h5>
+        <p class="card-text">{{ fuel.fuelName }}</p>
+        <a ng-click="deleteFuel(fuel.fuelId)" class="card-link text-danger hover">Delete</a>
+        <a ng-click="modifyFuel(fuel.fuelId)" class="card-link text-info hover">Modify</a>
+        <a ng-click="goBack(fuel)" class="card-link text-primary hover">Go back</a>
+    </div>
+</div>

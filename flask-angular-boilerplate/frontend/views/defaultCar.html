@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div ng-init="init()">
+    <input class="form-control" ng-model="filterText" ng-change='filter()'
+        placeholder="Search for specific car" style="margin-bottom: 5px" />
+    <button ng-click="createBrand()" type="button" class="btn btn-secondary" style="margin-bottom: 15px">Add new
+        car</button>
+    <div ng-repeat="note in notes track by $index" class="card bg-dark text-white"
+        style="width: 100%; margin-bottom: 10px">
+        <div class="card-body">
+            <h5 class="card-title">{{ car.brandId,car.modelId }}</h5>
+            <a ng-click="deleteCar(car.carId)" class="card-link text-danger hover">Delete</a>
+            <a ng-click="modifyCar(car.carId)" class="card-link text-info hover">Modify</a>
+            <a ng-click="previewCar(car.carId)" class="card-link text-primary hover">Preview</a>
+        </div>
+    </div>
+</div>
