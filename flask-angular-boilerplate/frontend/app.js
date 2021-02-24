@@ -19,6 +19,10 @@ var app = angular.module('appTitleGoesHere', [], function ($routeProvider, $loca
         .when('/edit/:id', {templateUrl:"./views/fuel_form.html", controller:"FuelModifyController"})
         .when('/create', { templateUrl: "./views/fuel_form.html", controller: "FuelCreateController" })
         .when('/fuel', { templateUrl: "./views/defaultFuel.html", controller: "DefFuelController" })
+        .when('/preview/:id', {templateUrl:"./views/car_preview.html", controller:"PreviewCarController"})
+        .when('/edit/:id', {templateUrl:"./views/car_form.html", controller:"CarModifyController"})
+        .when('/create', { templateUrl: "./views/car_form.html", controller: "CarCreateController" })
+        .when('/fuel', { templateUrl: "./views/defaultCar.html", controller: "DefCarController" })
         .otherwise({ redirectTo: "/" });
 
     $locationProvider.html5Mode(false);
@@ -72,9 +76,9 @@ app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brand
     }
 
     $scope.deleteNote = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this brand?")) {
             $brands.delete(id).then(function(result) {
-                alert("Note was deleted")
+                alert("Brand was deleted")
                 $navigate.goTo("/#/"); // go to home page after delete
             });
         }
@@ -100,7 +104,7 @@ app.controller('PreviewBrandController', function ($scope, $navigate, $routePara
     }
 
     $scope.deleteBrand = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this brand?")) {
             $notes.delete(id).then(function(result) {
                 alert("Note was deleted");
                 $navigate.goTo("/#/"); // go to home page after delete
@@ -140,7 +144,7 @@ app.controller('BrandModifyController', function ($scope, $navigate,$routeParams
     }
 
     $scope.deleteBrand = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this brand?")) {
             $brands.delete(id).then(function(result) {
                 alert("Brand was deleted");
                 $navigate.goTo("/#/"); // go to home page after delete
@@ -195,7 +199,7 @@ app.controller('DefModelController', function ($scope, $navigate,$timeout,$model
     }
 
     $scope.deleteModel = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this model?")) {
             $models.delete(id).then(function(result) {
                 alert("Model was deleted")
                 $navigate.goTo("/#/"); // go to home page after delete
@@ -222,7 +226,7 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
     }
 
     $scope.deleteModel = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this model?")) {
             $models.delete(id).then(function(result) {
                 alert("Model was deleted");
                 $navigate.goTo("/#/"); // go to home page after delete
@@ -266,7 +270,7 @@ app.controller('ModelModifyController', function ($scope, $navigate, $models, $r
     }
 
     $scope.deleteModel = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this model?")) {
             $models.delete(id).then(function(result) {
                 alert("Model was deleted");
                 $navigate.goTo("/#/"); // go to home page after delete
@@ -321,7 +325,7 @@ app.controller('DefFuelController', function ($scope, $navigate, $fuel, $timeout
     }
 
     $scope.deleteFuel = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this fuel?")) {
             $fuel.delete(id).then(function(result) {
                 alert("Note was deleted")
                 $navigate.goTo("/#/"); // go to home page after delete
@@ -392,7 +396,7 @@ app.controller('FuelModifyController', function ($scope, $navigate, $fuel, $rout
     }
 
     $scope.deleteFuel = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this fuel?")) {
             $fuel.delete(id).then(function(result) {
                 alert("Fuel was deleted");
                 $navigate.goTo("/#/"); // go to home page after delete
@@ -403,6 +407,139 @@ app.controller('FuelModifyController', function ($scope, $navigate, $fuel, $rout
     $scope.submit = function() {
         $fuel.modify($routeParams.id, $scope.fuel).then(function(result) {
             alert("Fuel was updated!");
+            $navigate.goTo(["/#/preview/", $routeParams.id].join(""));
+        })
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+});
+
+// home page controller (shows all the cars in the database)
+app.controller('DefCarController', function ($scope, $navigate, $car, $timeout,) {
+    $scope.car = [];
+    $scope.filterText = "";
+    $scope.init = function() {
+        $car.get($scope.filterText).then(function(result) {
+            $scope.car = result;
+        });
+    }
+
+    // timeout is used to avoid consant server calls (instead we use the debounce method)
+    var _timeout = null;
+    $scope.filter = function() {
+        if(_timeout) { // if there is already a timeout in process cancel it
+            $timeout.cancel(_timeout);
+        }
+        _timeout = $timeout(function() {
+            $scope.init();
+            _timeout = null;
+        }, 800);
+    }
+
+    $scope.createCar = function() {
+        $navigate.goTo("/#/create");
+    }
+
+    $scope.modifyCar = function(id) {
+        $navigate.goTo(["/#/edit/", id].join(""));
+    }
+
+    $scope.previewCar = function(id) {
+        $navigate.goTo(["/#/preview/", id].join(""));
+    }
+
+    $scope.deleteCar = function(id) {
+        if (confirm("Are you sure you want to delete this car?")) {
+            $car.delete(id).then(function(result) {
+                alert("Car was deleted")
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+});
+
+
+// preview for a single car
+app.controller('PreviewCarController', function ($scope, $navigate, $car, $routeParams) {
+    $scope.car = {};
+    $scope.init = function() {
+        $car.getById($routeParams.id).then(function(result) {
+            $scope.car = result;
+        });
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+
+    $scope.modifyCar = function(id) {
+        $navigate.goTo(["/#/edit/", id].join(""));
+    }
+
+    $scope.deleteCar = function(id) {
+        if (confirm("Are you sure you want to delete this car?")) {
+            $car.delete(id).then(function(result) {
+                alert("Car was deleted");
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+});
+
+// form for creating cars
+app.controller('CarCreateController', function ($scope, $navigate, $car) {
+    $scope.init = function() {};
+    $scope.car = {
+        "brand": "",
+        "model": "",
+        "model": "",
+        "year": "",
+        "price": "",
+        "fuel": "",
+        "reg": "",
+        "color": "",
+    };
+
+    $scope.submit = function() {
+        $car.create($scope.car).then(function(result) {
+            alert("Car was created!");
+            $navigate.goTo("/#/");
+        })
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+});
+
+// form for modifying cars
+app.controller('CarModifyController', function ($scope, $navigate, $car, $routeParams) {
+    $scope.car = {};
+    $scope.isEdit = true;
+
+    $scope.init = function() {
+        $car.getById($routeParams.id).then(function(result) {
+            $scope.car = result;
+        });
+        $car.getById($routeParams.id).then(function(result) {
+            $scope.car = result;
+        });
+    }
+
+    $scope.deleteCar = function(id) {
+        if (confirm("Are you sure you want to delete this car?")) {
+            $car.delete(id).then(function(result) {
+                alert("Car was deleted");
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+
+    $scope.submit = function() {
+        $car.modify($routeParams.id, $scope.car).then(function(result) {
+            alert("Car was updated!");
             $navigate.goTo(["/#/preview/", $routeParams.id].join(""));
         })
     }

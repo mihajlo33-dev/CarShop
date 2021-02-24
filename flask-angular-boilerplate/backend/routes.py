@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import select, delete
-from .models import brand,models,fuel
+from .models import brand,models,fuel,car
 from .methods import sqlExe, sqlAction, validateFields
 from datetime import datetime
 
@@ -9,6 +9,8 @@ noteRoutes = Blueprint("notes", __name__, url_prefix='/api/note')
 brandRoutes = Blueprint("brand", __name__, url_prefix='/api/brand')
 modelsRoutes = Blueprint("models", __name__, url_prefix='/api/models')
 fuelRoutes = Blueprint("fuel", __name__, url_prefix='/api/fuel')
+carRoutes = Blueprint("car", __name__, url_prefix='/api/car')
+
 
 
 
@@ -195,6 +197,80 @@ def delete_fuel(fuelId):
 
     return jsonify(success=True)
 
+
+@carRoutes.route('/get', methods=["POST"])
+def get_car():
+    query = select([car.c.carId, car.c.brand, car.c.model, car.c.year, car.c.price, car.c.fuel, car.c.reg, car.c.color,car.c.km])
+    get_multiple = True
+
+    if request.get_json().get("id", False):
+        carId = request.get_json()["id"]
+        query = query.where(car.c.carId == carId)
+        get_multiple = False
+
+    elif request.get_json().get("brandFilter", False):
+        search_text = "".join(("%", request.get_json()["brandFilter"], "%"))
+        query = query.where(car.c.brand.like(search_text))
+
+    result = sqlExe(query, multiple=get_multiple)
+
+    return jsonify(result)
+
+
+@carRoutes.route('/create', methods=["POST"])
+def create_car():
+    data = request.get_json()
+
+    if not validateFields(data, ["brand", "model", "year", "price", "fuel", "reg", "color", "km"]):
+        return jsonify(success=False, message="Invalid form data")
+
+    data = {
+        "brand": data["brand"],
+        "model": data["model"],
+        "year": data["year"],
+        "price": data["price"],
+        "fuel": data["fuel"],
+        "reg": data["reg"],
+        "color": data["color"],
+        "km": data["km"]
+    }
+
+    query = car.insert().values(data)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+
+@carRoutes.route('/modify/<carId>', methods=["POST"])
+def modify_car(carId):
+    data = request.get_json()
+
+    if not validateFields(data, ["carId", "brand", "model",  "model",  "year",  "price",  "fuel",  "reg",  "color",  "km"]):
+        return jsonify(success=False, message="Invalid form data")
+
+    data = {
+        "brand": data["brand"],
+        "model": data["model"],
+        "year": data["year"],
+        "price": data["price"],
+        "fuel": data["fuel"],
+        "reg": data["reg"],
+        "color": data["color"],
+        "km": data["km"]
+
+    }
+    query = car.update().values(data).where(car.c.carId == carId)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+
+@noteRoutes.route('/delete/<carId>', methods=["POST"])
+def delete_note(carId):
+    query = delete(car).where(car.c.carId == carId)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
 
 
 @noteRoutes.route('/get', methods=["POST"])

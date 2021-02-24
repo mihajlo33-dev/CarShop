@@ -1,0 +1,9 @@
+<form ng-init="init()">
+    <div class="form-group">
+        <label for="exampleInputPassword1">Name</label>
+        <select class="form-control"  ng-model="car.brand"></select>
+    </div>
+    <button ng-click="submit()" type="submit" class="btn btn-primary">Submit</button>
+    <a style="margin-left: 20px" ng-click="goBack(brand)" class="card-link text-primary hover">Go back</a>
+    <a ng-if="isEdit" ng-click="deleteNote(brand.brandID)" class="card-link text-danger hover">Delete</a>
+</form>
