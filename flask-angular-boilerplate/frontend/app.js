@@ -102,7 +102,7 @@ app.controller('PreviewBrandController', function ($scope, $navigate, $routePara
     $scope.deleteBrand = function(id) {
         if (confirm("Are you sure you want to delete this brand?")) {
             $brand.delete(id).then(function(result) {
-                alert("Note was deleted");
+                alert("Brand was deleted");
                 $navigate.goTo("/#/"); // go to home page after delete
             });
         }

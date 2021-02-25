@@ -1,7 +1,29 @@
+var app = angular.module('AvtoShop', [], function ($routeProvider, $locationProvider) {
+    $routeProvider
+        .when('/preview/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewBrandController"})
+        .when('/edit/:id', {templateUrl:"./views/brand_form.html", controller:"BrandModifyController"})
+        .when('/create', { templateUrl: "./views/brand_form.html", controller: "BrandCreateController" })
+        .when('/brand', { templateUrl: "./views/defaultBrand.html", controller: "DefBrandController" })
+        .when('/preview/:id', {templateUrl:"./views/models_preview.html", controller:"PreviewModelsController"})
+        .when('/edit/:id', {templateUrl:"./views/models_form.html", controller:"ModelsModifyController"})
+        .when('/create', { templateUrl: "./views/models_form.html", controller: "ModelsCreateController" })
+        .when('/models', { templateUrl: "./views/defaultModels.html", controller: "DefModelsController" })
+        .when('/preview/:id', {templateUrl:"./views/fuel_preview.html", controller:"PreviewFuelController"})
+        .when('/edit/:id', {templateUrl:"./views/fuel_form.html", controller:"FuelModifyController"})
+        .when('/create', { templateUrl: "./views/fuel_form.html", controller: "FuelCreateController" })
+        .when('/fuel', { templateUrl: "./views/defaultFuel.html", controller: "DefFuelController" })
+        .when('/preview/:id', {templateUrl:"./views/car_preview.html", controller:"PreviewCarController"})
+        .when('/edit/:id', {templateUrl:"./views/car_form.html", controller:"CarModifyController"})
+        .when('/create', { templateUrl: "./views/car_form.html", controller: "CarCreateController" })
+        .when('/fuel', { templateUrl: "./views/defaultCar.html", controller: "DefCarController" })
+        .otherwise({ redirectTo: "/" });
 
+    $locationProvider.html5Mode(false);
+
+});
 
 app.service('$brand', function($http) {
-    this.notes_api_uri = '/api/brand/';
+    this.brand_api_uri = '/api/brand/';
     this.default_options = function(url_ending, data) {
         return {
             url: [this.brand_api_uri, url_ending].join(""),
@@ -42,7 +64,7 @@ app.service('$brand', function($http) {
 });
 
 app.service('$models', function($http) {
-    this.notes_api_uri = '/api/models/';
+    this.models_api_uri = '/api/models/';
     this.default_options = function(url_ending, data) {
         return {
             url: [this.models_api_uri, url_ending].join(""),
@@ -83,7 +105,7 @@ app.service('$models', function($http) {
 });
 
 app.service('$fuel', function($http) {
-    this.notes_api_uri = '/api/fuel/';
+    this.fuel_api_uri = '/api/fuel/';
     this.default_options = function(url_ending, data) {
         return {
             url: [this.fuel_api_uri, url_ending].join(""),
@@ -124,7 +146,7 @@ app.service('$fuel', function($http) {
 });
 
 app.service('$car', function($http) {
-    this.notes_api_uri = '/api/car/';
+    this.car_api_uri = '/api/car/';
     this.default_options = function(url_ending, data) {
         return {
             url: [this.car_api_uri, url_ending].join(""),
