@@ -1,0 +1,9 @@
+<form ng-init="init()">
+    <div class="form-group">
+        <label for="exampleInputPassword1">Name</label>
+        <textarea class="form-control" placeholder="Enter description" ng-model="brand.brandName"></textarea>
+    </div>
+    <button ng-click="submit()" type="submit" class="btn btn-primary">Submit</button>
+    <a style="margin-left: 20px" ng-click="goBack(brand)" class="card-link text-primary hover">Go back</a>
+    <a ng-if="isEdit" ng-click="deleteNote(brand.brandID)" class="card-link text-danger hover">Delete</a>
+</form>
