@@ -1,7 +1,7 @@
 // routing system for the application
-// angularJS routing system works with views and controllers each seperate route can have a diff HTML tempalte (views directory) 
+// angularJS routing system works with views and controllers each separate route can have a diff HTML template (views directory)
 // and a diff Controller (app.controller)
-var app = angular.module('appTitleGoesHere', [], function ($routeProvider, $locationProvider) {
+var app = angular.module('app', [], function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/preview/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewBrandController"})
         .when('/edit/:id', {templateUrl:"./views/brand_form.html", controller:"BrandModifyController"})
@@ -89,6 +89,7 @@ app.controller('PreviewBrandController', function ($scope, $navigate, $routePara
         $brands.getById($routeParams.id).then(function(result) {
             $scope.brand = result;
         });
+    }
 
 
     $scope.goBack = function() {
