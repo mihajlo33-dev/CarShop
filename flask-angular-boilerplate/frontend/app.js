@@ -3,22 +3,22 @@
 // and a diff Controller (app.controller)
 var app = angular.module('app', [], function ($routeProvider, $locationProvider) {
     $routeProvider
-        .when('/preview/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewBrandController"})
-        .when('/edit/:id', {templateUrl:"./views/brand_form.html", controller:"BrandModifyController"})
-        .when('/create', { templateUrl: "./views/brand_form.html", controller: "BrandCreateController" })
+        .when('/preview_brand/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewBrandController"})
+        .when('/edit_brand/:id', {templateUrl:"./views/brand_form.html", controller:"BrandModifyController"})
+        .when('/create_brand', { templateUrl: "./views/brand_form.html", controller: "BrandCreateController" })
         .when('/brand', { templateUrl: "./views/defaultBrand.html", controller: "DefBrandController" })
-        .when('/preview/:id', {templateUrl:"./views/models_preview.html", controller:"PreviewModelsController"})
-        .when('/edit/:id', {templateUrl:"./views/models_form.html", controller:"ModelsModifyController"})
-        .when('/create', { templateUrl: "./views/models_form.html", controller: "ModelsCreateController" })
+        .when('/preview_models/:id', {templateUrl:"./views/models_preview.html", controller:"PreviewModelsController"})
+        .when('/edit_models/:id', {templateUrl:"./views/models_form.html", controller:"ModelsModifyController"})
+        .when('/create_models', { templateUrl: "./views/models_form.html", controller: "ModelsCreateController" })
         .when('/models', { templateUrl: "./views/defaultModels.html", controller: "DefModelsController" })
-        .when('/preview/:id', {templateUrl:"./views/fuel_preview.html", controller:"PreviewFuelController"})
-        .when('/edit/:id', {templateUrl:"./views/fuel_form.html", controller:"FuelModifyController"})
-        .when('/create', { templateUrl: "./views/fuel_form.html", controller: "FuelCreateController" })
+        .when('/preview_fuel/:id', {templateUrl:"./views/fuel_preview.html", controller:"PreviewFuelController"})
+        .when('/edit_fuel/:id', {templateUrl:"./views/fuel_form.html", controller:"FuelModifyController"})
+        .when('/create_fuel', { templateUrl: "./views/fuel_form.html", controller: "FuelCreateController" })
         .when('/fuel', { templateUrl: "./views/defaultFuel.html", controller: "DefFuelController" })
-        .when('/preview/:id', {templateUrl:"./views/car_preview.html", controller:"PreviewCarController"})
-        .when('/edit/:id', {templateUrl:"./views/car_form.html", controller:"CarModifyController"})
-        .when('/create', { templateUrl: "./views/car_form.html", controller: "CarCreateController" })
-        .when('/fuel', { templateUrl: "./views/defaultCar.html", controller: "DefCarController" })
+        .when('/preview_car/:id', {templateUrl:"./views/car_preview.html", controller:"PreviewCarController"})
+        .when('/edit_car/:id', {templateUrl:"./views/car_form.html", controller:"CarModifyController"})
+        .when('/create_car', { templateUrl: "./views/car_form.html", controller: "CarCreateController" })
+        .when('/car', { templateUrl: "./views/defaultCar.html", controller: "DefCarController" })
         .otherwise({ redirectTo: "/" });
 
     $locationProvider.html5Mode(false);
@@ -213,7 +213,7 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
         $models.getById($routeParams.id).then(function(result) {
             $scope.model = result;
         });
-
+    }
 
     $scope.goBack = function() {
         $navigate.goBack();
@@ -236,16 +236,16 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
 
 // form for creating brands
 app.controller('ModelCreateController', function ($scope, $navigate,$models) {
-}
+
     $scope.model = $models.get();
     $scope.init = function() {};
-    $scope.note = {
-        "brandName": ""
+    $scope.model = {
+        "modelName": ""
     };
 
     $scope.submit = function() {
-        $brands.create($scope.note).then(function(result) {
-            alert("Brand was created!");
+        $models.create($scope.model).then(function(result) {
+            alert("Model was created!");
             $navigate.goTo("/#/");
         })
     }
@@ -253,6 +253,8 @@ app.controller('ModelCreateController', function ($scope, $navigate,$models) {
     $scope.goBack = function() {
         $navigate.goBack();
     }
+
+
 });
 
 // form for modifying models
@@ -261,9 +263,6 @@ app.controller('ModelModifyController', function ($scope, $navigate, $models, $r
     $scope.isEdit = true;
 
     $scope.init = function() {
-        $models.getById($routeParams.id).then(function(result) {
-            $scope.model = result;
-        });
         $models.getById($routeParams.id).then(function(result) {
             $scope.model = result;
         });
@@ -364,7 +363,7 @@ app.controller('PreviewFuelController', function ($scope, $navigate, $fuel, $rou
 
 // form for creating fuel
 app.controller('FuelCreateController', function ($scope, $navigate, $fuel) {
-}
+
     $scope.fuel = $fuel.get();
     $scope.init = function() {};
     $scope.fuel = {
@@ -389,9 +388,6 @@ app.controller('FuelModifyController', function ($scope, $navigate, $fuel, $rout
     $scope.isEdit = true;
 
     $scope.init = function() {
-        $fuel.getById($routeParams.id).then(function(result) {
-            $scope.fuel = result;
-        });
         $fuel.getById($routeParams.id).then(function(result) {
             $scope.fuel = result;
         });
@@ -491,15 +487,19 @@ app.controller('PreviewCarController', function ($scope, $navigate, $car, $route
 });
 
 // form for creating cars
-app.controller('CarCreateController', function ($scope, $navigate, $car) {
-    $scope.init = function() {};
+app.controller('CarCreateController', function ($scope, $navigate, $car,$fuel,$models,$brand) {
+    $scope.fuelOptions  = [];
+    $scope.init = function(){
+        $scope.fuelOptions = $fuel.get();
+        $scope.modelsOptions = $models.get();
+        $scope.brandOptions = $brand.get();
+    };
     $scope.car = {
-        "brand": "",
-        "model": "",
-        "model": "",
+        "brandId": "",
+        "modelsId": "",
         "year": "",
         "price": "",
-        "fuel": "",
+        "fuelId": "",
         "reg": "",
         "color": "",
     };
