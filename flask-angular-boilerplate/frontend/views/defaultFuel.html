@@ -3,13 +3,13 @@
         placeholder="Search for specific fuel" style="margin-bottom: 5px" />
     <button ng-click="createFuel()" type="button" class="btn btn-secondary" style="margin-bottom: 15px">Add new
         fuel</button>
-    <div ng-repeat="note in notes track by $index" class="card bg-dark text-white"
+    <div ng-repeat="fuel in fuel track by $index" class="card bg-dark text-white"
         style="width: 100%; margin-bottom: 10px">
         <div class="card-body">
             <h5 class="card-title">{{ fuel.fuel }}</h5>
             <a ng-click="deleteFuel(fuel.fuelId)" class="card-link text-danger hover">Delete</a>
-            <a ng-click="modifyBrand(fuel.fuelId)" class="card-link text-info hover">Modify</a>
-            <a ng-click="previewBrand(fuel.fuelId)" class="card-link text-primary hover">Preview</a>
+            <a ng-click="modifyFuel(fuel.fuelId)" class="card-link text-info hover">Modify</a>
+            <a ng-click="previewFuel(fuel.fuelId)" class="card-link text-primary hover">Preview</a>
         </div>
     </div>
 </div>

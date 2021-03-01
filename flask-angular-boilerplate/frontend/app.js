@@ -60,18 +60,18 @@ app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brand
     }
 
     $scope.createBrand = function() {
-        $navigate.goTo("/#/create");
+        $navigate.goTo("/#/create_brand");
     }
 
     $scope.modifyBrand = function(id) {
-        $navigate.goTo(["/#/edit/", id].join(""));
+        $navigate.goTo(["/#/edit_brand/", id].join(""));
     }
 
     $scope.previewBrand = function(id) {
-        $navigate.goTo(["/#/preview/", id].join(""));
+        $navigate.goTo(["/#/preview_brand/", id].join(""));
     }
 
-    $scope.deleteNote = function(id) {
+    $scope.deleteBrand = function(id) {
         if (confirm("Are you sure you want to delete this brand?")) {
             $brands.delete(id).then(function(result) {
                 alert("Brand was deleted")
@@ -114,12 +114,12 @@ app.controller('PreviewBrandController', function ($scope, $navigate, $routePara
 app.controller('BrandCreateController', function ($scope, $navigate,$brands) {
     $scope.brand = $brand.get();
     $scope.init = function() {};
-    $scope.note = {
+    $scope.brands = {
         "brandName": ""
     };
 
     $scope.submit = function() {
-        $brands.create($scope.brand).then(function(result) {
+        $brand.create($scope.brand).then(function(result) {
             alert("Brand was created!");
             $navigate.goTo("/#/");
         })
@@ -312,21 +312,21 @@ app.controller('DefFuelController', function ($scope, $navigate, $fuel, $timeout
     }
 
     $scope.createFuel = function() {
-        $navigate.goTo("/#/create");
+        $navigate.goTo("/#/create_fuel");
     }
 
     $scope.modifyFuel = function(id) {
-        $navigate.goTo(["/#/edit/", id].join(""));
+        $navigate.goTo(["/#/edit_fuel/", id].join(""));
     }
 
     $scope.previewFuel = function(id) {
-        $navigate.goTo(["/#/preview/", id].join(""));
+        $navigate.goTo(["/#/preview_fuel/", id].join(""));
     }
 
     $scope.deleteFuel = function(id) {
         if (confirm("Are you sure you want to delete this fuel?")) {
             $fuel.delete(id).then(function(result) {
-                alert("Note was deleted")
+                alert("Fuel was deleted")
                 $navigate.goTo("/#/"); // go to home page after delete
             });
         }
@@ -348,11 +348,11 @@ app.controller('PreviewFuelController', function ($scope, $navigate, $fuel, $rou
     }
 
     $scope.modifyFuel = function(id) {
-        $navigate.goTo(["/#/edit/", id].join(""));
+        $navigate.goTo(["/#/edit_fuel/", id].join(""));
     }
 
     $scope.deleteFuel = function(id) {
-        if (confirm("Are you sure you want to delete this note?")) {
+        if (confirm("Are you sure you want to delete this fuel?")) {
             $fuel.delete(id).then(function(result) {
                 alert("Fuel was deleted");
                 $navigate.goTo("/#/"); // go to home page after delete
@@ -437,15 +437,15 @@ app.controller('DefCarController', function ($scope, $navigate, $car, $timeout,)
     }
 
     $scope.createCar = function() {
-        $navigate.goTo("/#/create");
+        $navigate.goTo("/#/create_car");
     }
 
     $scope.modifyCar = function(id) {
-        $navigate.goTo(["/#/edit/", id].join(""));
+        $navigate.goTo(["/#/edit_car/", id].join(""));
     }
 
     $scope.previewCar = function(id) {
-        $navigate.goTo(["/#/preview/", id].join(""));
+        $navigate.goTo(["/#/preview_car/", id].join(""));
     }
 
     $scope.deleteCar = function(id) {
@@ -473,7 +473,7 @@ app.controller('PreviewCarController', function ($scope, $navigate, $car, $route
     }
 
     $scope.modifyCar = function(id) {
-        $navigate.goTo(["/#/edit/", id].join(""));
+        $navigate.goTo(["/#/edit_car/", id].join(""));
     }
 
     $scope.deleteCar = function(id) {

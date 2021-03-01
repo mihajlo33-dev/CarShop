@@ -6,7 +6,7 @@
         </select>
         <label for="exampleInputPassword1">Model</label>
         <select class="form-control" ng-model="car.modelsId">
-            <option value="fuel.fuelId" ng-reepat="modelName in modelsOptions">{{ models.modelName }}</option>
+            <option value="models.modelsId" ng-reepat="modelName in modelsOptions">{{ models.modelName }}</option>
         </select>
         <input class="form-control" placeholder="Enter year" ng-model="car.year"></input>
         <input class="form-control" placeholder="Enter price" ng-model="car.price"></input>
