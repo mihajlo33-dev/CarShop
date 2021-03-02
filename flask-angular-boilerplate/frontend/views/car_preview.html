@@ -4,15 +4,15 @@
     <div class="card-body preview-card">
         <h5 class="card-title">{{ car.carId }}</h5>
         <p class="card-text">{{ car.brandId }}</p>
-        <h5 class="card-title">{{ car.modelId }}</h5>
+        <h5 class="card-title">{{ car.modelsId }}</h5>
         <h5 class="card-title">{{ car.year}}</h5>
         <h5 class="card-title">{{ car.price}}</h5>
         <h5 class="card-title">{{ car.fuel}}</h5>
         <h5 class="card-title">{{ car.reg}}</h5>
         <h5 class="card-title">{{ car.color}}</h5>
         <h5 class="card-title">{{ car.km}}</h5>
-        <a ng-click="deleteFuel(fuel.fuelId)" class="card-link text-danger hover">Delete</a>
-        <a ng-click="modifyFuel(fuel.fuelId)" class="card-link text-info hover">Modify</a>
-        <a ng-click="goBack(fuel)" class="card-link text-primary hover">Go back</a>
+        <a ng-click="deleteCar(car.carId)" class="card-link text-danger hover">Delete</a>
+        <a ng-click="modifyCar(car.carId)" class="card-link text-info hover">Modify</a>
+        <a ng-click="goBack(car)" class="card-link text-primary hover">Go back</a>
     </div>
 </div>

@@ -1,5 +1,3 @@
-
-
 app.service('$brand', function($http) {
     this.brand_api_uri = '/api/brand/';
     this.default_options = function(url_ending, data) {

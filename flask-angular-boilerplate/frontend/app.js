@@ -38,12 +38,12 @@ function MainCtrl($scope, $route, $routeParams, $navigate, $location) {
 
 
 // home page controller (shows all the brands in the database)
-app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brands) {
+app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brand) {
     $scope.brand = $brand.get();
     $scope.filterText = "";
     $scope.init = function() {
-        $brands.get($scope.filterText).then(function(result) {
-            $scope.brands = result;
+        $brand.get($scope.filterText).then(function(result) {
+            $scope.brand = result;
         });
     }
 
@@ -73,7 +73,7 @@ app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brand
 
     $scope.deleteBrand = function(id) {
         if (confirm("Are you sure you want to delete this brand?")) {
-            $brands.delete(id).then(function(result) {
+            $brand.delete(id).then(function(result) {
                 alert("Brand was deleted")
                 $navigate.goTo("/#/"); // go to home page after delete
             });
@@ -86,7 +86,7 @@ app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brand
 app.controller('PreviewBrandController', function ($scope, $navigate, $routeParams,$brands) {
     $scope.brand = $brand.get();
     $scope.init = function() {
-        $brands.getById($routeParams.id).then(function(result) {
+        $brand.getById($routeParams.id).then(function(result) {
             $scope.brand = result;
         });
     }
@@ -114,7 +114,7 @@ app.controller('PreviewBrandController', function ($scope, $navigate, $routePara
 app.controller('BrandCreateController', function ($scope, $navigate,$brands) {
     $scope.brand = $brand.get();
     $scope.init = function() {};
-    $scope.brands = {
+    $scope.brand = {
         "brandName": ""
     };
 
@@ -136,14 +136,14 @@ app.controller('BrandModifyController', function ($scope, $navigate,$routeParams
     $scope.isEdit = true;
 
     $scope.init = function() {
-        $brands.getById($routeParams.id).then(function(result) {
+        $brand.getById($routeParams.id).then(function(result) {
             $scope.brand = result;
         });
     }
 
     $scope.deleteBrand = function(id) {
         if (confirm("Are you sure you want to delete this brand?")) {
-            $brands.delete(id).then(function(result) {
+            $brand.delete(id).then(function(result) {
                 alert("Brand was deleted");
                 $navigate.goTo("/#/"); // go to home page after delete
             });
@@ -151,7 +151,7 @@ app.controller('BrandModifyController', function ($scope, $navigate,$routeParams
     }
 
     $scope.submit = function() {
-        $brands.modify($routeParams.id, $scope.brand).then(function(result) {
+        $brand.modify($routeParams.id, $scope.brand).then(function(result) {
             alert("Brand was updated!");
             $navigate.goTo(["/#/preview/", $routeParams.id].join(""));
         })
@@ -163,8 +163,8 @@ app.controller('BrandModifyController', function ($scope, $navigate,$routeParams
 });
 
 // home page controller (shows all the models in the database)
-app.controller('DefModelController', function ($scope, $navigate,$timeout,$models) {
-    $scope.model = $models.get();
+app.controller('DefModelsController', function ($scope, $navigate,$timeout,$models) {
+    $scope.models = $models.get();
     $scope.filterText = "";
     $scope.init = function() {
         $models.get($scope.filterText).then(function(result) {
@@ -184,19 +184,19 @@ app.controller('DefModelController', function ($scope, $navigate,$timeout,$model
         }, 800);
     }
 
-    $scope.createModel = function() {
+    $scope.createModels = function() {
         $navigate.goTo("/#/create");
     }
 
-    $scope.modifyModel = function(id) {
+    $scope.modifyModels = function(id) {
         $navigate.goTo(["/#/edit/", id].join(""));
     }
 
-    $scope.previewModel = function(id) {
+    $scope.previewModels = function(id) {
         $navigate.goTo(["/#/preview/", id].join(""));
     }
 
-    $scope.deleteModel = function(id) {
+    $scope.deleteModels = function(id) {
         if (confirm("Are you sure you want to delete this model?")) {
             $models.delete(id).then(function(result) {
                 alert("Model was deleted")
@@ -208,10 +208,10 @@ app.controller('DefModelController', function ($scope, $navigate,$timeout,$model
 
 // preview for a single model
 app.controller('PreviewModelController', function ($scope, $navigate, $routeParams,$models) {
-    $scope.model = $models.get();
+    $scope.models = $models.get();
     $scope.init = function() {
         $models.getById($routeParams.id).then(function(result) {
-            $scope.model = result;
+            $scope.models = result;
         });
     }
 
@@ -219,11 +219,11 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
         $navigate.goBack();
     }
 
-    $scope.modifyModel = function(id) {
+    $scope.modifyModels = function(id) {
         $navigate.goTo(["/#/edit/", id].join(""));
     }
 
-    $scope.deleteModel = function(id) {
+    $scope.deleteModels = function(id) {
         if (confirm("Are you sure you want to delete this model?")) {
             $models.delete(id).then(function(result) {
                 alert("Model was deleted");
@@ -237,9 +237,9 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
 // form for creating brands
 app.controller('ModelCreateController', function ($scope, $navigate,$models) {
 
-    $scope.model = $models.get();
+    $scope.models = $models.get();
     $scope.init = function() {};
-    $scope.model = {
+    $scope.models = {
         "modelName": ""
     };
 
@@ -259,16 +259,16 @@ app.controller('ModelCreateController', function ($scope, $navigate,$models) {
 
 // form for modifying models
 app.controller('ModelModifyController', function ($scope, $navigate, $models, $routeParams) {
-    $scope.model = $models.get();
+    $scope.models = $models.get();
     $scope.isEdit = true;
 
     $scope.init = function() {
         $models.getById($routeParams.id).then(function(result) {
-            $scope.model = result;
+            $scope.models = result;
         });
     }
 
-    $scope.deleteModel = function(id) {
+    $scope.deleteModels = function(id) {
         if (confirm("Are you sure you want to delete this model?")) {
             $models.delete(id).then(function(result) {
                 alert("Model was deleted");
