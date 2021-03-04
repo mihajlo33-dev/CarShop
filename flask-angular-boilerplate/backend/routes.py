@@ -1,15 +1,20 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import select, delete
-from .models import brand,models,fuel,car
+from .models import brand,models,fuel,car,todo,user
 from .methods import sqlExe, sqlAction, validateFields
 from datetime import datetime
+import  uuid
+from werkzeug.security import generate_password_hash,check_password_hash
+
+
 
 # notes Bluebrint (all the routes that are used for the notes model - they use the /api/note prefix)
 brandRoutes = Blueprint("brand", __name__, url_prefix='/api/brand')
 modelsRoutes = Blueprint("models", __name__, url_prefix='/api/models')
 fuelRoutes = Blueprint("fuel", __name__, url_prefix='/api/fuel')
 carRoutes = Blueprint("car", __name__, url_prefix='/api/car')
-
+userRoutes = Blueprint("user", __name__, url_prefix='/api/user')
+todoRoutes = Blueprint("todo", __name__, url_prefix='/api/todo')
 
 
 
@@ -259,6 +264,82 @@ def modify_car(carId):
 
     }
     query = car.update().values(data).where(car.c.carId == carId)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+@carRoutes.route('/delete/<carId>', methods=["POST"])
+def delete_fuel(carId):
+    query = delete(car).where(car.c.carId == carId)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+@userRoutes.route('/get', methods=["POST"])
+def get_user():
+    query = select([user.c.id, user.c.public_id, user.c.name, user.c.password, user.c.admin])
+    get_multiple = True
+
+    if request.get_json().get("id", False):
+        id = request.get_json()["id"]
+        query = query.where(user.c.id == id)
+        get_multiple = False
+
+    elif request.get_json().get("nameFilter", False):
+        search_text = "".join(("%", request.get_json()["nameFilter"], "%"))
+        query = query.where(user.c.name.like(search_text))
+
+    result = sqlExe(query, multiple=get_multiple)
+
+    return jsonify(result)
+
+
+@userRoutes.route('/create', methods=["POST"])
+def create_user():
+    data = request.get_json()
+
+    if not validateFields(data, ["public_id", "name", "password", "admin"]):
+        return jsonify(success=False, message="Invalid form data")
+
+    hashed_password = generate_password_hash(data['password'], method='sha256')
+
+    data = {
+        "public_id": uuid.uuid4(),
+        "name": data["name"],
+        "password": hashed_password,
+        "admin": False
+
+    }
+
+
+    query = user.insert().values(data)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+
+@userRoutes.route('/modify/<id>', methods=["POST"])
+def modify_user(id):
+    data = request.get_json()
+
+    if not validateFields(data, ["id", "public_id", "name",  "password",  "admin"]):
+        return jsonify(success=False, message="Invalid form data")
+
+    data = {
+        "public_id": data["public_id"],
+        "name": data["name"],
+        "password": data["password"],
+        "admin": data["admin"]
+
+    }
+    query = user.update().values(data).where(user.c.id == id)
+    result = sqlAction(query)
+
+    return jsonify(success=True)
+
+@userRoutes.route('/delete/<id>', methods=["POST"])
+def delete_user(id):
+    query = delete(user).where(user.c.id == id)
     result = sqlAction(query)
 
     return jsonify(success=True)

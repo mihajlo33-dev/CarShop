@@ -19,6 +19,14 @@ var app = angular.module('app', [], function ($routeProvider, $locationProvider)
         .when('/edit_car/:id', {templateUrl:"./views/car_form.html", controller:"CarModifyController"})
         .when('/create_car', { templateUrl: "./views/car_form.html", controller: "CarCreateController" })
         .when('/car', { templateUrl: "./views/defaultCar.html", controller: "DefCarController" })
+        .when('/preview_user/:id', {templateUrl:"./views/user_preview.html", controller:"PreviewUserController"})
+        .when('/edit_user/:id', {templateUrl:"./views/user_form.html", controller:"UserModifyController"})
+        .when('/register_user', { templateUrl: "./views/user_form.html", controller: "UserRegisterController" })
+        .when('/user', { templateUrl: "./views/defaultUser.html", controller: "DefUserController" })
+        .when('/preview_todo/:id', {templateUrl:"./views/todo_preview.html", controller:"PreviewTodoController"})
+        .when('/edit_todo/:id', {templateUrl:"./views/todo_form.html", controller:"TodoModifyController"})
+        .when('/create_todo', { templateUrl: "./views/todo_form.html", controller: "TodoCreateController" })
+        .when('/todo', { templateUrl: "./views/defaultTodo.html", controller: "DefTodoController" })
         .otherwise({ redirectTo: "/" });
 
     $locationProvider.html5Mode(false);
@@ -83,7 +91,7 @@ app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brand
 
 
 // preview for a single brand
-app.controller('PreviewBrandController', function ($scope, $navigate, $routeParams,$brands) {
+app.controller('PreviewBrandController', function ($scope, $navigate, $routeParams,$brand) {
     $scope.brand = $brand.get();
     $scope.init = function() {
         $brand.getById($routeParams.id).then(function(result) {
@@ -97,7 +105,7 @@ app.controller('PreviewBrandController', function ($scope, $navigate, $routePara
     }
 
     $scope.modifyBrand = function(id) {
-        $navigate.goTo(["/#/edit/", id].join(""));
+        $navigate.goTo(["/#/edit_brand/", id].join(""));
     }
 
     $scope.deleteBrand = function(id) {
@@ -111,7 +119,7 @@ app.controller('PreviewBrandController', function ($scope, $navigate, $routePara
 });
 
 // form for creating brands
-app.controller('BrandCreateController', function ($scope, $navigate,$brands) {
+app.controller('BrandCreateController', function ($scope, $navigate,$brand) {
     $scope.brand = $brand.get();
     $scope.init = function() {};
     $scope.brand = {
@@ -131,7 +139,7 @@ app.controller('BrandCreateController', function ($scope, $navigate,$brands) {
 });
 
 // form for modifying brands
-app.controller('BrandModifyController', function ($scope, $navigate,$routeParams,$brands) {
+app.controller('BrandModifyController', function ($scope, $navigate,$routeParams,$brand) {
     $scope.brand = $brand.get();
     $scope.isEdit = true;
 
@@ -153,7 +161,7 @@ app.controller('BrandModifyController', function ($scope, $navigate,$routeParams
     $scope.submit = function() {
         $brand.modify($routeParams.id, $scope.brand).then(function(result) {
             alert("Brand was updated!");
-            $navigate.goTo(["/#/preview/", $routeParams.id].join(""));
+            $navigate.goTo(["/#/preview_brand/", $routeParams.id].join(""));
         })
     }
 
@@ -185,15 +193,15 @@ app.controller('DefModelsController', function ($scope, $navigate,$timeout,$mode
     }
 
     $scope.createModels = function() {
-        $navigate.goTo("/#/create");
+        $navigate.goTo("/#/create_models");
     }
 
     $scope.modifyModels = function(id) {
-        $navigate.goTo(["/#/edit/", id].join(""));
+        $navigate.goTo(["/#/edit_models/", id].join(""));
     }
 
     $scope.previewModels = function(id) {
-        $navigate.goTo(["/#/preview/", id].join(""));
+        $navigate.goTo(["/#/preview_models/", id].join(""));
     }
 
     $scope.deleteModels = function(id) {
@@ -220,7 +228,7 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
     }
 
     $scope.modifyModels = function(id) {
-        $navigate.goTo(["/#/edit/", id].join(""));
+        $navigate.goTo(["/#/edit_models/", id].join(""));
     }
 
     $scope.deleteModels = function(id) {
@@ -234,7 +242,7 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
 });
 
 
-// form for creating brands
+// form for creating models
 app.controller('ModelCreateController', function ($scope, $navigate,$models) {
 
     $scope.models = $models.get();
@@ -280,7 +288,7 @@ app.controller('ModelModifyController', function ($scope, $navigate, $models, $r
     $scope.submit = function() {
         $models.modify($routeParams.id, $scope.model).then(function(result) {
             alert("Model was updated!");
-            $navigate.goTo(["/#/preview/", $routeParams.id].join(""));
+            $navigate.goTo(["/#/preview_models/", $routeParams.id].join(""));
         })
     }
 
@@ -405,7 +413,7 @@ app.controller('FuelModifyController', function ($scope, $navigate, $fuel, $rout
     $scope.submit = function() {
         $fuel.modify($routeParams.id, $scope.fuel).then(function(result) {
             alert("Fuel was updated!");
-            $navigate.goTo(["/#/preview/", $routeParams.id].join(""));
+            $navigate.goTo(["/#/preview_fuel/", $routeParams.id].join(""));
         })
     }
 
@@ -542,7 +550,7 @@ app.controller('CarModifyController', function ($scope, $navigate, $car, $routeP
     $scope.submit = function() {
         $car.modify($routeParams.id, $scope.car).then(function(result) {
             alert("Car was updated!");
-            $navigate.goTo(["/#/preview/", $routeParams.id].join(""));
+            $navigate.goTo(["/#/preview_car/", $routeParams.id].join(""));
         })
     }
 
@@ -550,6 +558,142 @@ app.controller('CarModifyController', function ($scope, $navigate, $car, $routeP
         $navigate.goBack();
     }
 });
+
+
+// home page controller (shows all the users in the database)
+app.controller('DefUserController', function ($scope, $navigate, $user, $timeout) {
+    $scope.user = [];
+    $scope.filterText = "";
+    $scope.init = function() {
+        $user.get($scope.filterText).then(function(result) {
+            $scope.car = result;
+        });
+    }
+
+    // timeout is used to avoid consant server calls (instead we use the debounce method)
+    var _timeout = null;
+    $scope.filter = function() {
+        if(_timeout) { // if there is already a timeout in process cancel it
+            $timeout.cancel(_timeout);
+        }
+        _timeout = $timeout(function() {
+            $scope.init();
+            _timeout = null;
+        }, 800);
+    }
+
+    $scope.createUser = function() {
+        $navigate.goTo("/#/create_user");
+    }
+
+    $scope.modifyUser = function(id) {
+        $navigate.goTo(["/#/edit_user/", id].join(""));
+    }
+
+    $scope.previewUser= function(id) {
+        $navigate.goTo(["/#/preview_user/", id].join(""));
+    }
+
+    $scope.deleteUser = function(id) {
+        if (confirm("Are you sure you want to delete this user?")) {
+            $car.delete(id).then(function(result) {
+                alert("User was deleted")
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+});
+
+
+// preview for a single user
+app.controller('PreviewUserController', function ($scope, $navigate, $user, $routeParams) {
+    $scope.user = {};
+    $scope.init = function() {
+        $user.getById($routeParams.id).then(function(result) {
+            $scope.user = result;
+        });
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+
+    $scope.modifyUser = function(id) {
+        $navigate.goTo(["/#/edit_user/", id].join(""));
+    }
+
+    $scope.deleteUser = function(id) {
+        if (confirm("Are you sure you want to delete this user?")) {
+            $user.delete(id).then(function(result) {
+                alert("User was deleted");
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+});
+
+// form for creating user
+app.controller('UserRegisterController', function ($scope, $navigate, $user) {
+    $scope.userOptions  = [];
+    $scope.init = function(){
+    };
+    $scope.user = {
+        "public_id": "",
+        "name":"",
+        "password":"",
+        "admin":""
+
+    };
+
+    $scope.submit = function() {
+        $user.create($scope.user).then(function(result) {
+            alert("User was registred!");
+            $navigate.goTo("/#/");
+        })
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+});
+
+// form for modifying users
+app.controller('UserModifyController', function ($scope, $navigate, $user, $routeParams) {
+    $scope.user = {};
+    $scope.isEdit = true;
+
+    $scope.init = function() {
+        $user.getById($routeParams.id).then(function(result) {
+            $scope.user = result;
+        });
+        $user.getById($routeParams.id).then(function(result) {
+            $scope.user = result;
+        });
+    }
+
+    $scope.deleteUser = function(id) {
+        if (confirm("Are you sure you want to delete this user?")) {
+            $user.delete(id).then(function(result) {
+                alert("User was deleted");
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+
+    $scope.submit = function() {
+        $user.modify($routeParams.id, $scope.user).then(function(result) {
+            alert("User was updated!");
+            $navigate.goTo(["/#/preview_user/", $routeParams.id].join(""));
+        })
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+});
+
+
+
 
 
 

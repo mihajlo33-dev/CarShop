@@ -3,7 +3,7 @@ import os
 import sys
 from flask import Flask, send_from_directory, request, jsonify, render_template
 from flask_cors import CORS
-from .routes import brandRoutes,modelsRoutes,carRoutes
+from .routes import brandRoutes,modelsRoutes,carRoutes,todoRoutes,userRoutes
 from .config import DB_URI
 
 def create_app(config):
@@ -11,6 +11,7 @@ def create_app(config):
     # global configuration
     app = Flask(__name__, static_folder='./../frontend')
     app.config.from_object(__name__)
+    app.config['SECRET_KEY'] = 'thisissecret'
     app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
     CORS(app)
 
@@ -22,6 +23,11 @@ def create_app(config):
     app.register_blueprint(brandRoutes)
     app.register_blueprint(modelsRoutes)
     app.register_blueprint(carRoutes)
+    app.register_blueprint(userRoutes)
+    app.register_blueprint(todoRoutes)
+
+
+
 
 
 
