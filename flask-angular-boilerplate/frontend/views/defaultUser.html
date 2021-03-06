@@ -1,0 +1,15 @@
+<div ng-init="init()">
+    <input class="form-control" ng-model="filterText" ng-change='filter()'
+        placeholder="Search for specific user" style="margin-bottom: 5px" />
+    <button ng-click="createUser()" type="button" class="btn btn-secondary" style="margin-bottom: 15px">Add new
+        user</button>
+    <div ng-repeat="user in user track by $index" class="card bg-dark text-white"
+        style="width: 100%; margin-bottom: 10px">
+        <div class="card-body">
+            <h5 class="card-title">{{ user.nameame }}</h5>
+            <a ng-click="deleteUser(user.id)" class="card-link text-danger hover">Delete</a>
+            <a ng-click="modifyUser(user.id)" class="card-link text-info hover">Modify</a>
+            <a ng-click="previewUser(user.id)" class="card-link text-primary hover">Preview</a>
+        </div>
+    </div>
+</div>

@@ -163,6 +163,53 @@ app.service('$car', function($http) {
 });
 
 
+
+
+
+app.service('$user', function($http) {
+    this.user_api_uri = '/api/user/';
+    this.default_options = function(url_ending, data) {
+        return {
+            url: [this.car_api_uri, url_ending].join(""),
+            method: 'POST',
+            data: data
+        };
+    }
+
+    this.get = function(nameFilter) {
+        return $http(this.default_options('get', {nameFilter: nameFilter})).then(function(response) {
+            return response.data;
+        });
+    };
+
+    this.create = function(data) {
+        return $http(this.default_options('create', data)).then(function(response) {
+            return response.data;
+        });
+    };
+
+    this.modify = function(id, data) {
+        return $http(this.default_options('modify/'+id, data)).then(function(response) {
+            return response.data;
+        });
+    };
+
+    this.delete = function(id) {
+        return $http(this.default_options('delete/'+id, {})).then(function(response) {
+            return response.data;
+        });
+    };
+
+    this.getById = function(id) {
+        return $http(this.default_options('get', {id: id})).then(function(response) {
+            return response.data;
+        });
+    }
+});
+
+
+
+
 // Custom navigation service
 app.service('$navigate', function() {
     this.goBack = function() {

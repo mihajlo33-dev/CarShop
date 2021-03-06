@@ -1,0 +1,11 @@
+<div ng-init="init()" class="card card bg-dark text-white">
+    <img class="card-img-top"
+        src="https://image-cdn.beforward.jp/files/pictures/201309/154664/BF159828_1.jpg">
+    <div class="card-body preview-card">
+        <h5 class="card-title">{{ user.id }}</h5>
+        <p class="card-text">{{ user.name }}</p>
+        <a ng-click="deleteUser(user.id)" class="card-link text-danger hover">Delete</a>
+        <a ng-click="modifyUser(user.id)" class="card-link text-info hover">Modify</a>
+        <a ng-click="goBack(user)" class="card-link text-primary hover">Go back</a>
+    </div>
+</div>

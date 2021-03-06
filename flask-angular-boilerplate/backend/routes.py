@@ -298,7 +298,7 @@ def get_user():
 def create_user():
     data = request.get_json()
 
-    if not validateFields(data, ["public_id", "name", "password", "admin"]):
+    if not validateFields(data, ["name", "password"]):
         return jsonify(success=False, message="Invalid form data")
 
     hashed_password = generate_password_hash(data['password'], method='sha256')
@@ -322,7 +322,7 @@ def create_user():
 def modify_user(id):
     data = request.get_json()
 
-    if not validateFields(data, ["id", "public_id", "name",  "password",  "admin"]):
+    if not validateFields(data, ["name",  "password"]):
         return jsonify(success=False, message="Invalid form data")
 
     data = {
