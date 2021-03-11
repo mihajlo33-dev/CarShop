@@ -39,18 +39,11 @@ car = Table('car', metadata,
 
 user = Table('user', metadata,
              Column('id', Integer, primary_key=True, autoincrement=True),
-             Column('public_id', String(50), unique=True, nullable=True),
-             Column('name', String(50), nullable=True),
-             Column('password', String(50), nullable=True),
-             Column('admin', Boolean, nullable=True)
+             Column('name', String(250), nullable=True),
+             Column('password', String(250), nullable=True),
 )
 
-todo = Table('todo', metadata,
-             Column('id', Integer, primary_key=True, autoincrement=True),
-             Column('text', String(50), nullable=True),
-             Column('complete', Boolean, nullable=True),
-             Column('user_id', Integer, nullable=True)
-             )
+
 
 # methods which should be called on the init of the database
 engine = create_engine(DB_URI)

@@ -90,8 +90,8 @@ app.service('$fuel', function($http) {
         };
     }
 
-    this.get = function(fuelNameFilter) {
-        return $http(this.default_options('get', {fuelNameFilter: fuelNameFilter})).then(function(response) {
+    this.get = function(fuelFilter) {
+        return $http(this.default_options('get', {fuelFilter: fuelFilter})).then(function(response) {
             return response.data;
         });
     };
@@ -170,7 +170,7 @@ app.service('$user', function($http) {
     this.user_api_uri = '/api/user/';
     this.default_options = function(url_ending, data) {
         return {
-            url: [this.car_api_uri, url_ending].join(""),
+            url: [this.user_api_uri, url_ending].join(""),
             method: 'POST',
             data: data
         };

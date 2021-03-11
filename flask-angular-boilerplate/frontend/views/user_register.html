@@ -1,7 +1,22 @@
 <form ng-init="init()">
     <div class="form-group">
-        <label for="exampleInputPassword1">User</label>
-        <textarea class="form-control" placeholder="Enter user" ng-model="user.name"></textarea>
+    <div class="container">
+    <label for="exampleInputPassword1">User</label>
+    <p>Please fill in this form to create an account.</p>
+    <hr>
+
+    <label for="email"><b>Email</b></label>
+    <input class="form-control" placeholder="Enter username" ng-model="user.name" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input class="form-control" placeholder="Enter password" ng-model="user.password" required>
+
+    <label for="psw-repeat"><b>Repeat Password</b></label>
+    <input class="form-control" placeholder="Enter password" ng-model="user.password_confirm" required>
+    <hr>
+    <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+
+
     </div>
     <button ng-click="submit()" type="submit" class="btn btn-primary">Submit</button>
     <a style="margin-left: 20px" ng-click="goBack(user)" class="card-link text-primary hover">Go back</a>

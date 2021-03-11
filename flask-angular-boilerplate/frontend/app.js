@@ -23,10 +23,8 @@ var app = angular.module('app', [], function ($routeProvider, $locationProvider)
         .when('/edit_user/:id', {templateUrl:"./views/user_form.html", controller:"UserModifyController"})
         .when('/register_user', { templateUrl: "./views/user_register.html", controller: "UserRegisterController" })
         .when('/user', { templateUrl: "./views/defaultUser.html", controller: "DefUserController" })
-        .when('/preview_todo/:id', {templateUrl:"./views/todo_preview.html", controller:"PreviewTodoController"})
-        .when('/edit_todo/:id', {templateUrl:"./views/todo_form.html", controller:"TodoModifyController"})
-        .when('/create_todo', { templateUrl: "./views/todo_form.html", controller: "TodoCreateController" })
-        .when('/todo', { templateUrl: "./views/defaultTodo.html", controller: "DefTodoController" })
+        .when('/login_user', {templateUrl:"./views/user_login.html", controller:"UserLoginController"})
+        
         .otherwise({ redirectTo: "/" });
 
     $locationProvider.html5Mode(false);
@@ -583,7 +581,8 @@ app.controller('DefUserController', function ($scope, $navigate, $user, $timeout
     }
 
     $scope.createUser = function() {
-        $navigate.goTo("/#/create_user");
+
+        $navigate.goTo("/#/register_user");
     }
 
     $scope.modifyUser = function(id) {
@@ -638,12 +637,14 @@ app.controller('UserRegisterController', function ($scope, $navigate, $user) {
     $scope.init = function(){
     };
     $scope.user = {
-        "public_id": "",
+        
+        
         "name":"",
         "password":"",
-        "admin":""
 
     };
+    $scope.password_confirm = "";
+    
 
     $scope.submit = function() {
         $user.create($scope.user).then(function(result) {

@@ -1,10 +1,14 @@
-from flask import Blueprint, jsonify, request
+from functools import wraps
+from certifi import where
+from django.conf.global_settings import SECRET_KEY
+from flask import Blueprint, jsonify, request, app, make_response
 from sqlalchemy import select, delete
-from .models import brand,models,fuel,car,todo,user
+from .models import brand,models,fuel,car,user
 from .methods import sqlExe, sqlAction, validateFields
 from datetime import datetime
 import  uuid
 from werkzeug.security import generate_password_hash,check_password_hash
+import  jwt
 
 
 
@@ -14,7 +18,30 @@ modelsRoutes = Blueprint("models", __name__, url_prefix='/api/models')
 fuelRoutes = Blueprint("fuel", __name__, url_prefix='/api/fuel')
 carRoutes = Blueprint("car", __name__, url_prefix='/api/car')
 userRoutes = Blueprint("user", __name__, url_prefix='/api/user')
-todoRoutes = Blueprint("todo", __name__, url_prefix='/api/todo')
+
+app.config['SECRET_KEY'] = 'thisissecret'
+
+
+def token_required(f):
+   @wraps(f)
+   def decorator(*args, **kwargs):
+
+      token = None
+
+      if 'x-access-tokens' in request.headers:
+         token = request.headers['x-access-tokens']
+
+      if not token:
+         return jsonify({'message': 'a valid token is missing'})
+
+      try:
+         data = jwt.decode(token, app.config[SECRET_KEY])
+         current_user = user.query.filter_by(id=data['id']).first()
+      except:
+        return jsonify({'message': 'token is invalid'})
+
+        return f(current_user, *args, **kwargs)
+   return decorator
 
 
 
@@ -277,7 +304,7 @@ def delete_fuel(carId):
 
 @userRoutes.route('/get', methods=["POST"])
 def get_user():
-    query = select([user.c.id, user.c.public_id, user.c.name, user.c.password, user.c.admin])
+    query = select([user.c.id, user.c.name, user.c.password])
     get_multiple = True
 
     if request.get_json().get("id", False):
@@ -294,8 +321,8 @@ def get_user():
     return jsonify(result)
 
 
-@userRoutes.route('/create', methods=["POST"])
-def create_user():
+@userRoutes.route('/register', methods=["POST"])
+def register_user():
     data = request.get_json()
 
     if not validateFields(data, ["name", "password"]):
@@ -304,10 +331,8 @@ def create_user():
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
     data = {
-        "public_id": uuid.uuid4(),
         "name": data["name"],
         "password": hashed_password,
-        "admin": False
 
     }
 
@@ -326,11 +351,8 @@ def modify_user(id):
         return jsonify(success=False, message="Invalid form data")
 
     data = {
-        "public_id": data["public_id"],
         "name": data["name"],
         "password": data["password"],
-        "admin": data["admin"]
-
     }
     query = user.update().values(data).where(user.c.id == id)
     result = sqlAction(query)
@@ -344,5 +366,20 @@ def delete_user(id):
 
     return jsonify(success=True)
 
+@userRoutes.route('/login', methods=["POST"])
+def login_user(user = user):
+    auth = request.authorization
+    if not auth or not auth.username or not auth.password:
+        return make_response('could not verify', 401, {'WWW.Authentication': 'Basic realm: "login required"'})
+
+    user = user.query.filter_by(name=user.name).first()
+
+    if check_password_hash(user.password, auth.password):
+        token = jwt.encode(
+            {'id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+            app.config['SECRET_KEY'])
+        return jsonify({'token': token.decode('UTF-8')})
+
+    return make_response('could not verify', 401, {'WWW.Authentication': 'Basic realm: "login required"'})
 
 
