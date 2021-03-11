@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request, app, make_response
 from sqlalchemy import select, delete
 from .models import brand,models,fuel,car,user
 from .methods import sqlExe, sqlAction, validateFields
+from .factory import  create_app
 from datetime import datetime
 import  uuid
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -19,7 +20,6 @@ fuelRoutes = Blueprint("fuel", __name__, url_prefix='/api/fuel')
 carRoutes = Blueprint("car", __name__, url_prefix='/api/car')
 userRoutes = Blueprint("user", __name__, url_prefix='/api/user')
 
-app.config['SECRET_KEY'] = 'thisissecret'
 
 
 def token_required(f):
@@ -35,7 +35,7 @@ def token_required(f):
          return jsonify({'message': 'a valid token is missing'})
 
       try:
-         data = jwt.decode(token, app.config[SECRET_KEY])
+         data = jwt.decode(token, create_app().config[SECRET_KEY])
          current_user = user.query.filter_by(id=data['id']).first()
       except:
         return jsonify({'message': 'token is invalid'})
@@ -377,7 +377,7 @@ def login_user(user = user):
     if check_password_hash(user.password, auth.password):
         token = jwt.encode(
             {'id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
-            app.config['SECRET_KEY'])
+            create_app().config['SECRET_KEY'])
         return jsonify({'token': token.decode('UTF-8')})
 
     return make_response('could not verify', 401, {'WWW.Authentication': 'Basic realm: "login required"'})
