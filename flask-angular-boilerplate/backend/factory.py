@@ -3,7 +3,7 @@ import os
 import sys
 from flask import Flask, send_from_directory, request, jsonify, render_template
 from flask_cors import CORS
-from .routes import brandRoutes,modelsRoutes,carRoutes,todoRoutes,userRoutes
+from .routes import brandRoutes,modelsRoutes,carRoutes,userRoutes,fuelRoutes
 from .config import DB_URI
 
 def create_app(config):
@@ -24,7 +24,8 @@ def create_app(config):
     app.register_blueprint(modelsRoutes)
     app.register_blueprint(carRoutes)
     app.register_blueprint(userRoutes)
-    app.register_blueprint(todoRoutes)
+    app.register_blueprint(fuelRoutes)
+
 
 
 

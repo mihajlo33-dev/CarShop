@@ -24,6 +24,8 @@ var app = angular.module('app', [], function ($routeProvider, $locationProvider)
         .when('/register_user', { templateUrl: "./views/user_register.html", controller: "UserRegisterController" })
         .when('/user', { templateUrl: "./views/defaultUser.html", controller: "DefUserController" })
         .when('/login_user', {templateUrl:"./views/user_login.html", controller:"UserLoginController"})
+        .when('/forgot', {templateUrl:"./views/forgot.html", controller:"ForgotController"})
+
         
         .otherwise({ redirectTo: "/" });
 
@@ -38,6 +40,15 @@ function MainCtrl($scope, $route, $routeParams, $navigate, $location) {
     $scope.$routeParams = $routeParams;
     $scope.home = function() {
         $navigate.goTo("/#/");
+    }
+    $scope.car = function() {
+        $navigate.goTo("/#/car");
+    }
+    $scope.login = function() {
+        $navigate.goTo("/#/login_user");
+    }
+    $scope.register = function() {
+        $navigate.goTo("/#/register_user");
     }
 }
 
@@ -241,7 +252,7 @@ app.controller('PreviewModelController', function ($scope, $navigate, $routePara
 
 
 // form for creating models
-app.controller('ModelCreateController', function ($scope, $navigate,$models) {
+app.controller('ModelsCreateController', function ($scope, $navigate,$models) {
 
     $scope.models = $models.get();
     $scope.init = function() {};

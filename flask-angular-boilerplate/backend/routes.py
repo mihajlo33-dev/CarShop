@@ -1,11 +1,10 @@
 from functools import wraps
 from certifi import where
-from django.conf.global_settings import SECRET_KEY
 from flask import Blueprint, jsonify, request, app, make_response
 from sqlalchemy import select, delete
+
 from .models import brand,models,fuel,car,user
 from .methods import sqlExe, sqlAction, validateFields
-from .factory import  create_app
 from datetime import datetime
 import  uuid
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -35,7 +34,7 @@ def token_required(f):
          return jsonify({'message': 'a valid token is missing'})
 
       try:
-         data = jwt.decode(token, create_app().config[SECRET_KEY])
+         data = jwt.decode(token, app().config[SECRET_KEY])
          current_user = user.query.filter_by(id=data['id']).first()
       except:
         return jsonify({'message': 'token is invalid'})
@@ -169,7 +168,7 @@ def delete_models(modelsId):
     return jsonify(success=True)
 
 
-@fuelRoutes.route('/get',methods=["POST"])
+@fuelRoutes.route('/get', methods=["POST"])
 def get_fuel():
     query = select([fuel.c.fuelId, fuel.c.fuel])
     get_multiple = True
@@ -215,7 +214,7 @@ def modify_fuel(fuelId):
     data = {
         "fuel": data["fuel"],
     }
-    query = fuel.update().values(data).where(fuel.c.fuelId==fuelId)
+    query = fuel.update().values(data).where(fuel.c.fuelId == fuelId)
     result = sqlAction(query)
 
     return jsonify(success=True)
@@ -276,7 +275,7 @@ def create_car():
 def modify_car(carId):
     data = request.get_json()
 
-    if not validateFields(data, ["carId", "brand", "model",  "model",  "year",  "price",  "fuel",  "reg",  "color",  "km"]):
+    if not validateFields(data, ["carId", "brand", "model",  "model",  "year",  "price",  "fuel",  "reg",  "color",  "km" ]):
         return jsonify(success=False, message="Invalid form data")
 
     data = {
@@ -377,7 +376,7 @@ def login_user(user = user):
     if check_password_hash(user.password, auth.password):
         token = jwt.encode(
             {'id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
-            create_app().config['SECRET_KEY'])
+            app().config['SECRET_KEY'])
         return jsonify({'token': token.decode('UTF-8')})
 
     return make_response('could not verify', 401, {'WWW.Authentication': 'Basic realm: "login required"'})

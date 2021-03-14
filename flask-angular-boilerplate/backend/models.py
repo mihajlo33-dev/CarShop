@@ -16,13 +16,15 @@ brand = Table('brand', metadata,
               Column('brandId', Integer, primary_key=True, autoincrement=True),
               Column('brandName', String(120), nullable=True)
 )
+
 models = Table('models', metadata,
                Column('modelsId', Integer, primary_key=True, autoincrement=True),
                Column('modelName', String(120), nullable=True)
 )
+
 fuel = Table('fuel', metadata,
-    Column('fuelId', Integer, primary_key=True, autoincrement=True),
-    Column('fuel', String(120), nullable=True)
+             Column('fuelId', Integer, primary_key=True, autoincrement=True),
+             Column('fuel', String(120), nullable=True)
 )
 car = Table('car', metadata,
             Column('carId', Integer, primary_key=True, autoincrement=True),
