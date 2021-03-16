@@ -176,6 +176,12 @@ app.service('$user', function($http) {
         };
     }
 
+    this.login = function(data){
+        return $http(this.default_options('login',data)).then(function(response){
+            return response.data;
+        });
+    }
+
     this.get = function(nameFilter) {
         return $http(this.default_options('get', {nameFilter: nameFilter})).then(function(response) {
             return response.data;
