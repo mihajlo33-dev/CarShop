@@ -230,7 +230,7 @@ def delete_fuel(fuelId):
 
 @carRoutes.route('/get', methods=["POST"])
 def get_car():
-    query = select([car.c.carId, car.c.brandId, car.c.modelId, car.c.year, car.c.price, car.c.fuel, car.c.reg, car.c.color,car.c.km])
+    query = select([car.c.carId, car.c.brandId, car.c.modelId, car.c.year, car.c.price, car.c.fuelId, car.c.reg, car.c.color,car.c.km])
     get_multiple = True
 
     if request.get_json().get("id", False):
@@ -251,15 +251,15 @@ def get_car():
 def create_car():
     data = request.get_json()
 
-    if not validateFields(data, ["brand", "model", "year", "price", "fuel", "reg", "color", "km"]):
+    if not validateFields(data, ["brand", "models", "year", "price", "fuel", "reg", "color", "km"]):
         return jsonify(success=False, message="Invalid form data")
 
     data = {
         "brandId": data["brandId"],
-        "modelId": data["modelId"],
+        "modelsId": data["modelsId"],
         "year": data["year"],
         "price": data["price"],
-        "fuel": data["fuel"],
+        "fuelId": data["fuelId"],
         "reg": data["reg"],
         "color": data["color"],
         "km": data["km"]
@@ -275,15 +275,15 @@ def create_car():
 def modify_car(carId):
     data = request.get_json()
 
-    if not validateFields(data, ["carId", "brand", "model",  "model",  "year",  "price",  "fuel",  "reg",  "color",  "km" ]):
+    if not validateFields(data, ["brand", "models", "year",  "price",  "fuel",  "reg",  "color",  "km" ]):
         return jsonify(success=False, message="Invalid form data")
 
     data = {
         "brandId": data["brandId"],
-        "modelId": data["modelId"],
+        "modelsId": data["modelsId"],
         "year": data["year"],
         "price": data["price"],
-        "fuel": data["fuel"],
+        "fuelId": data["fuelId"],
         "reg": data["reg"],
         "color": data["color"],
         "km": data["km"]
