@@ -230,7 +230,7 @@ def delete_fuel(fuelId):
 
 @carRoutes.route('/get', methods=["POST"])
 def get_car():
-    query = select([car.c.carId, car.c.brandId, car.c.modelId, car.c.year, car.c.price, car.c.fuelId, car.c.reg, car.c.color,car.c.km])
+    query = select([car.c.carId, car.c.brandId, car.c.modelsId, car.c.year, car.c.price, car.c.fuelId, car.c.reg, car.c.color,car.c.km])
     get_multiple = True
 
     if request.get_json().get("id", False):
