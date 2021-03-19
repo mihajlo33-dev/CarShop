@@ -6,7 +6,9 @@
     <div ng-repeat="car in car track by $index" class="card bg-dark text-white"
         style="width: 100%; margin-bottom: 10px">
         <div class="card-body">
-            <h5 class="card-title">{{ car.carId}}</h5>
+            <h5 ng-repeat="brand in brand track by $index" class="card-title">{{ brand.brandName}}</h5>
+            <h5 ng-repeat="models in models track by $index" class="card-title">{{ models.modelName}}</h5>
+            <h5 ng-repeat="fuel in fuel track by $index" class="card-title">{{ fuel.fuel}}</h5>
             <a ng-click="deleteCar(car.carId)" class="card-link text-danger hover">Delete</a>
             <a ng-click="modifyCar(car.carId)" class="card-link text-info hover">Modify</a>
             <a ng-click="previewCar(car.carId)" class="card-link text-primary hover">Preview</a>
