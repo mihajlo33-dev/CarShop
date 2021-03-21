@@ -15,15 +15,17 @@
 
 <body ng-app="app" ng-controller="MainCtrl">
     <header>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-          <a class="navbar-brand hover text-white" ng-click="home()">Avto Shop</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-light" style="background-color: #f9e6ba;">
+          <a class="navbar-brand hover text-dark" ng-click="home()" style="border: solid #FF9671 3px;border-radius:70%;">Avto Shop</a>
+          <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand hover text-white"  ng-click="car()">Cars</a>
+          </button>-->
+          <div class="topnav">
+          </div>
           <div class="topnav-right">
-            <a class="navbar-brand hover text-white fixed-right" ng-click="login()">Login</a>
-            <a class="navbar-brand hover text-white" ng-click="register()">Register</a>
+            <a class="navbar-brand hover text-dark fixed-left"  ng-click="car()" style="border: solid #FF9671 3px;border-radius:10%;">Cars</a>
+            <a class="navbar-brand hover text-dark fixed-right" ng-click="login()" style="border: solid #FF9671 3px;border-radius:10%;">Login</a>
+            <a class="navbar-brand hover text-dark" ng-click="register()" style="border: solid #FF9671 3px;border-radius:10%;">Register</a>
           </div>        
         </nav>
       </header>

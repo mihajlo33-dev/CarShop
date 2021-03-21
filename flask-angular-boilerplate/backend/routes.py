@@ -5,7 +5,9 @@ from sqlalchemy import select, delete
 
 from .models import brand,models,fuel,car,user
 from .methods import sqlExe, sqlAction, validateFields
-from datetime import datetime
+from datetime import datetime,timedelta
+from .config import SECRET_KEY
+
 import  uuid
 from werkzeug.security import generate_password_hash,check_password_hash
 import  jwt
@@ -366,20 +368,24 @@ def delete_user(id):
 
     return jsonify(success=True)
 
+
 @userRoutes.route('/login', methods=["POST"])
-def login_user(user = user):
-    auth = request.authorization
-    if not auth or not auth.username or not auth.password:
-        return make_response('could not verify', 401, {'WWW.Authentication': 'Basic realm: "login required"'})
+def login_user():
+    data = request.get_json()
 
-    user = user.query.filter_by(name=user.name).first()
+    if not validateFields(data, ["name", "password"]):
+        return jsonify(success=False, message="Invalid form data")
 
-    if check_password_hash(user.password, auth.password):
-        token = jwt.encode(
-            {'id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
-            app().config['SECRET_KEY'])
-        return jsonify({'token': token.decode('UTF-8')})
+    userQuery = select([user.c.id, user.c.password]).where(user.c.name == data["name"])
+    loggedUser = sqlExe(userQuery, multiple=False)
 
-    return make_response('could not verify', 401, {'WWW.Authentication': 'Basic realm: "login required"'})
+    if not loggedUser:
+        return jsonify(success=False, message="User with the name - '%s' doesn't exist!" % data["name"])
+
+    if check_password_hash(loggedUser["password"], data["password"]):
+        token = jwt.encode({'id': loggedUser["id"], 'exp': datetime.utcnow() + timedelta(minutes=30)}, SECRET_KEY)
+        return jsonify(token=token, success=True)
+
+    return jsonify(success=False, message="Wrong password!")
 
 

@@ -438,6 +438,7 @@ app.controller('DefCarController', function ($scope, $navigate, $car, $timeout,)
     $scope.init = function() {
         $car.get($scope.filterText).then(function(result) {
             $scope.car = result;
+            console.log(result);
         });
     }
 
@@ -705,32 +706,14 @@ app.controller('UserModifyController', function ($scope, $navigate, $user, $rout
 });
 
 
-// // preview for a single fuel
-// app.controller('UserLoginController', function ($scope, $navigate, $user, $routeParams) {
-//     $scope.fuel = $fuel.get();
-//     $scope.init = function() {
-//         $fuel.getById($routeParams.id).then(function(result) {
-//             $scope.fuel = result;
-//         });
-//     }
-
-//     $scope.goBack = function() {
-//         $navigate.goBack();
-//     }
-
-//     $scope.modifyFuel = function(id) {
-//         $navigate.goTo(["/#/edit_fuel/", id].join(""));
-//     }
-
-//     $scope.deleteFuel = function(id) {
-//         if (confirm("Are you sure you want to delete this fuel?")) {
-//             $fuel.delete(id).then(function(result) {
-//                 alert("Fuel was deleted");
-//                 $navigate.goTo("/#/"); // go to home page after delete
-//             });
-//         }
-//     }
-// });
+// user-login controller
+app.controller('UserLoginController', function ($scope, $navigate, $user, $routeParams) {
+    $scope.submit = function() {
+        $user.login($scope.user).then(function(result) {
+            console.log(result);
+        })
+    }
+});
 
 
 

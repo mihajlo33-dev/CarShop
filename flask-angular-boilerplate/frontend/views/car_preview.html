@@ -1,16 +1,16 @@
 <div ng-init="init()" class="card card bg-dark text-white">
     <img class="card-img-top"
-        src="https://vistapointe.net/images/ribblehead-viaduct-wallpaper-7.jpg">
+        src="images/carr.png">
     <div class="card-body preview-card">
-        <h5 class="card-title">{{ car.carId }}</h5>
-        <p class="card-text">{{ car.brandId }}</p>
-        <h5 class="card-title">{{ car.modelsId }}</h5>
-        <h5 class="card-title">{{ car.year}}</h5>
-        <h5 class="card-title">{{ car.price}}</h5>
-        <h5 class="card-title">{{ car.fuel}}</h5>
-        <h5 class="card-title">{{ car.reg}}</h5>
-        <h5 class="card-title">{{ car.color}}</h5>
-        <h5 class="card-title">{{ car.km}}</h5>
+       <!--<h5 class="card-title">{{ car.carId }}</h5>--> 
+        <h5 class="card-title"><b>Brand</b> :   {{ car.brandName }}</h5>
+        <h5 class="card-title"><b>Model</b> :   {{ car.modelName }}</h5>
+        <h5 class="card-title"><b>Year</b> :    {{ car.year}}</h5>
+        <h5 class="card-title"><b>Price</b> :   {{ car.price}}</h5>
+        <h5 class="card-title"><b>Fuel</b> :    {{ car.fuel}}</h5>
+        <h5 class="card-title"><b>Register number</b> :   {{ car.reg}}</h5>
+        <h5 class="card-title"><b>Color</b> :   {{ car.color}}</h5>
+        <h5 class="card-title"><b>Kilometeres</b> :   {{ car.km}}</h5>
         <a ng-click="deleteCar(car.carId)" class="card-link text-danger hover">Delete</a>
         <a ng-click="modifyCar(car.carId)" class="card-link text-info hover">Modify</a>
         <a ng-click="goBack(car)" class="card-link text-primary hover">Go back</a>

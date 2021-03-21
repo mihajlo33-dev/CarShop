@@ -42,9 +42,16 @@ car = Table('car', metadata,
 user = Table('user', metadata,
              Column('id', Integer, primary_key=True, autoincrement=True),
              Column('name', String(250), nullable=True),
-             Column('password', String(250), nullable=True),
-)
+             Column('password', String(250), nullable=True)
+            )
 
+images = Table('images', metadata,
+               Column('imagesId', Integer, primary_key=True, autoincrement=True),
+               Column('image1', String(250), nullable=True),
+               Column('image2', String(250), nullable=True),
+               Column('image3', String(250), nullable=True),
+               Column('image4', String(250), nullable=True)
+               )
 
 
 # methods which should be called on the init of the database

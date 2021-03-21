@@ -189,7 +189,7 @@ app.service('$user', function($http) {
     };
 
     this.create = function(data) {
-        return $http(this.default_options('create', data)).then(function(response) {
+        return $http(this.default_options('register', data)).then(function(response) {
             return response.data;
         });
     };
