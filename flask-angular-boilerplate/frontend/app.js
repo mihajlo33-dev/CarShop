@@ -707,14 +707,18 @@ app.controller('UserModifyController', function ($scope, $navigate, $user, $rout
 
 
 // user-login controller
-app.controller('UserLoginController', function ($scope, $navigate, $user, $routeParams) {
+app.controller('UserLoginController', function ($scope, $navigate, $user) {
+    $scope.init = function(){};
+    $scope.user = { 
+        "name":"",
+        "password":"",
+    };
     $scope.submit = function() {
         $user.login($scope.user).then(function(result) {
             console.log(result);
         })
     }
 });
-
 
 
 
