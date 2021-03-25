@@ -24,10 +24,9 @@ var app = angular.module('app', [], function ($routeProvider, $locationProvider)
         .when('/register_user', { templateUrl: "./views/user_register.html", controller: "UserRegisterController" })
         .when('/user', { templateUrl: "./views/defaultUser.html", controller: "DefUserController" })
         .when('/login_user', {templateUrl:"./views/user_login.html", controller:"UserLoginController"})
-        .when('/forgot', {templateUrl:"./views/forgot.html", controller:"ForgotController"})
 
         
-        .otherwise({ redirectTo: "/" });
+        .otherwise({ redirectTo: "/car" });
 
     $locationProvider.html5Mode(false);
 
