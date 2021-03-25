@@ -42,7 +42,8 @@ car = Table('car', metadata,
 user = Table('user', metadata,
              Column('id', Integer, primary_key=True, autoincrement=True),
              Column('name', String(250), nullable=True),
-             Column('password', String(250), nullable=True)
+             Column('password', String(250), nullable=True),
+             Column('admin', Boolean, nullable=True)
             )
 
 images = Table('images', metadata,
