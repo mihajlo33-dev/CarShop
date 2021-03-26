@@ -506,11 +506,23 @@ app.controller('PreviewCarController', function ($scope, $navigate, $car, $route
 // form for creating cars
 app.controller('CarCreateController', function ($scope, $navigate, $car,$fuel,$models,$brand) {
     $scope.fuelOptions  = [];
+    $scope.modelsOptions = [];
+    $scope.brandOptions = [];
     $scope.init = function(){
-        $scope.fuelOptions = $fuel.get();
-        $scope.modelsOptions = $models.get();
-        $scope.brandOptions = $brand.get();
+        $fuel.get().then(function(result) {
+            $scope.fuelOptions = result;
+        });
+
+        $brand.get().then(function(result) {
+            console.log(result);
+            $scope.brandOptions = result;
+        });
+
+        $models.get().then(function(result) {
+            $scope.modelsOptions = result;
+        });
     };
+    
     $scope.car = {
         "brandId": "",
         "modelsId": "",
@@ -525,41 +537,6 @@ app.controller('CarCreateController', function ($scope, $navigate, $car,$fuel,$m
         $car.create($scope.car).then(function(result) {
             alert("Car was created!");
             $navigate.goTo("/#/");
-        })
-    }
-
-    $scope.goBack = function() {
-        $navigate.goBack();
-    }
-});
-
-// form for modifying cars
-app.controller('CarModifyController', function ($scope, $navigate, $car, $routeParams) {
-    $scope.car = {};
-    $scope.isEdit = true;
-
-    $scope.init = function() {
-        $car.getById($routeParams.id).then(function(result) {
-            $scope.car = result;
-        });
-        $car.getById($routeParams.id).then(function(result) {
-            $scope.car = result;
-        });
-    }
-
-    $scope.deleteCar = function(id) {
-        if (confirm("Are you sure you want to delete this car?")) {
-            $car.delete(id).then(function(result) {
-                alert("Car was deleted");
-                $navigate.goTo("/#/"); // go to home page after delete
-            });
-        }
-    }
-
-    $scope.submit = function() {
-        $car.modify($routeParams.id, $scope.car).then(function(result) {
-            alert("Car was updated!");
-            $navigate.goTo(["/#/preview_car/", $routeParams.id].join(""));
         })
     }
 
