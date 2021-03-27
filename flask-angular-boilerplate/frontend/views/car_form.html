@@ -1,18 +1,18 @@
 <form ng-init="init()">
     <div class="form-group">
         <label for="exampleInputPassword1">Brand</label>
-        <select class="form-control" ng-model="brand.brandId">
-            <option value="brand.brandId" ng-repeat="brandName in brandOptions">{{ brand.brandName }}</option>
+        <select class="form-control" ng-model="car.brandId">
+            <option value="{{ brand.brandId }}" ng-repeat="brand in brandOptions">{{ brand.brandName }}</option>
         </select>
         <label for="exampleInputPassword1">Model</label>
         <select class="form-control" ng-model="car.modelsId">
-            <option value="models.modelsId" ng-repeat="modelName in modelsOptions">{{ models.modelName }}</option>
+            <option value="{{ models.modelsId }}" ng-repeat="models in modelsOptions">{{ models.modelName }}</option>
         </select>
         <input class="form-control" placeholder="Enter year" ng-model="car.year"></input>
         <input class="form-control" placeholder="Enter price" ng-model="car.price"></input>
         <label for="exampleInputPassword1">Fuel</label>
         <select class="form-control" ng-model="car.fuelId">
-            <option value="fuel.fuelId" ng-repeat="fuel in fuelOptions">{{ fuel.fuel }}</option>
+            <option value="{{ fuel.fuelId }}" ng-repeat="fuel in fuelOptions">{{ fuel.fuel }}</option>
         </select>
         <input class="form-control" placeholder="Enter register number" ng-model="car.reg"></input>
         <input class="form-control" placeholder="Enter color" ng-model="car.color"></input>

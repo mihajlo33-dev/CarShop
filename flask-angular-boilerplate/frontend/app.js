@@ -545,6 +545,41 @@ app.controller('CarCreateController', function ($scope, $navigate, $car,$fuel,$m
     }
 });
 
+// form for modifying cars
+app.controller('CarModifyController', function ($scope, $navigate, $car, $routeParams) {
+    $scope.car = {};
+    $scope.isEdit = true;
+
+    $scope.init = function() {
+        $car.getById($routeParams.id).then(function(result) {
+            $scope.car = result;
+        });
+        $car.getById($routeParams.id).then(function(result) {
+            $scope.car = result;
+        });
+    }
+
+    $scope.deleteCar = function(id) {
+        if (confirm("Are you sure you want to delete this car?")) {
+            $car.delete(id).then(function(result) {
+                alert("Car was deleted");
+                $navigate.goTo("/#/"); // go to home page after delete
+            });
+        }
+    }
+
+    $scope.submit = function() {
+        $car.modify($routeParams.id, $scope.car).then(function(result) {
+            alert("Car was updated!");
+            $navigate.goTo(["/#/preview_car/", $routeParams.id].join(""));
+        })
+    }
+
+    $scope.goBack = function() {
+        $navigate.goBack();
+    }
+});
+
 
 // home page controller (shows all the users in the database)
 app.controller('DefUserController', function ($scope, $navigate, $user, $timeout) {

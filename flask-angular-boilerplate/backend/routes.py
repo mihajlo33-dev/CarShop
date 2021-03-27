@@ -254,7 +254,7 @@ def get_car():
 def create_car():
     data = request.get_json()
 
-    if not validateFields(data, ["brand", "models", "year", "price", "fuel", "reg", "color", "km"]):
+    if not validateFields(data, ["brandId", "modelsId", "year", "price", "fuelId", "reg", "color", "km"]):
         return jsonify(success=False, message="Invalid form data")
 
     data = {
@@ -278,7 +278,7 @@ def create_car():
 def modify_car(carId):
     data = request.get_json()
 
-    if not validateFields(data, ["brand", "models", "year",  "price",  "fuel",  "reg",  "color",  "km" ]):
+    if not validateFields(data, ["brandId", "modelsId", "year",  "price",  "fuelId",  "reg",  "color",  "km" ]):
         return jsonify(success=False, message="Invalid form data")
 
     data = {
