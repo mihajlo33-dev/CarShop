@@ -35,8 +35,9 @@ car = Table('car', metadata,
             Column('fuelId', Integer, nullable=True),
             Column('reg', String(120), nullable=True),
             Column('color', String(120), nullable=True),
-            Column('km', Integer, nullable=True)
-
+            Column('km', Integer, nullable=True),
+            Column('id', Integer, nullable=True),
+            Column('imagesId', Integer, nullable=True)
             )
 
 user = Table('user', metadata,
@@ -48,10 +49,8 @@ user = Table('user', metadata,
 
 images = Table('images', metadata,
                Column('imagesId', Integer, primary_key=True, autoincrement=True),
-               Column('image1', String(250), nullable=True),
-               Column('image2', String(250), nullable=True),
-               Column('image3', String(250), nullable=True),
-               Column('image4', String(250), nullable=True)
+               Column('url', String(250), nullable=True),
+               Column('carId', Integer, nullable=True)
                )
 
 

@@ -546,8 +546,19 @@ app.controller('CarCreateController', function ($scope, $navigate, $car,$fuel,$m
 });
 
 // form for modifying cars
-app.controller('CarModifyController', function ($scope, $navigate, $car, $routeParams) {
-    $scope.car = {};
+app.controller('CarModifyController', function ($scope, $navigate, $car, $routeParams,$fuel,$models,$brand) {
+    $scope.car = {
+        "brandId": "",
+        "modelsId": "",
+        "year": "",
+        "price": "",
+        "fuelId": "",
+        "reg": "",
+        "color": ""
+    };
+    $scope.fuelOptions  = [];
+    $scope.modelsOptions = [];
+    $scope.brandOptions = [];
     $scope.isEdit = true;
 
     $scope.init = function() {
@@ -556,6 +567,18 @@ app.controller('CarModifyController', function ($scope, $navigate, $car, $routeP
         });
         $car.getById($routeParams.id).then(function(result) {
             $scope.car = result;
+        });
+        $fuel.get().then(function(result) {
+            $scope.fuelOptions = result;
+        });
+
+        $brand.get().then(function(result) {
+            //console.log(result);
+            $scope.brandOptions = result;
+        });
+
+        $models.get().then(function(result) {
+            $scope.modelsOptions = result;
         });
     }
 
