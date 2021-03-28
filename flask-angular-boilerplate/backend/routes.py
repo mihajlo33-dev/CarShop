@@ -327,7 +327,7 @@ def get_user():
 def register_user():
     data = request.get_json()
 
-    if not validateFields(data, ["name", "password"]):
+    if not validateFields(data, ["name", "password","admin"]):
         return jsonify(success=False, message="Invalid form data")
 
     hashed_password = generate_password_hash(data['password'], method='sha256')
@@ -335,6 +335,7 @@ def register_user():
     data = {
         "name": data["name"],
         "password": hashed_password,
+        "admin": data["admin"]
 
     }
 
