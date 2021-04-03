@@ -49,7 +49,9 @@ function MainCtrl($scope, $route, $routeParams, $navigate, $location) {
     $scope.register = function() {
         $navigate.goTo("/#/register_user");
     }
+    $scope.isUserLoggedIn = !!localStorage.getItem("token");
 }
+
 
 
 
@@ -747,11 +749,25 @@ app.controller('UserLoginController', function ($scope, $navigate, $user) {
         "name":"",
         "password":"",
     };
+    // $scope.isUserLoggedIn = true;
     $scope.submit = function() {
         $user.login($scope.user).then(function(result) {
             console.log(result);
+            localStorage.setItem("token",result.token)
+            // if(localStorage.getItem(result.token == "")){
+            //     alert("User is not logged in,please try again!");
+            // }else{
+            //     alert("User is logged in!")
+            // }
+
         })
+    $scope.checkToken = function(){
+
     }
+   
+
+    }
+    console.log($scope.user)
 });
 
 

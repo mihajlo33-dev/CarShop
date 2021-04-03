@@ -17,16 +17,16 @@
     <header>
         <nav class="navbar navbar-light" style="background-color: #f9e6ba;">
           <a class="navbar-brand hover text-dark" ng-click="home()" style="border: solid #FF9671 3px;border-radius:70%;">Avto Shop</a>
-          <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>-->
           <div class="topnav">
           </div>
-          <div class="topnav-right">
+          <div class="topnav-right" ng-if="isUserLoggedIn == false">
             <a class="navbar-brand hover text-dark fixed-left"  ng-click="car()" style="border: solid #FF9671 3px;border-radius:10%;">Cars</a>
             <a class="navbar-brand hover text-dark fixed-right" ng-click="login()" style="border: solid #FF9671 3px;border-radius:10%;">Login</a>
             <a class="navbar-brand hover text-dark" ng-click="register()" style="border: solid #FF9671 3px;border-radius:10%;">Register</a>
-          </div>        
+          </div>  
+          <div class="topnav-right" ng-if="isUserLoggedIn == true">
+            <a class="navbar-brand hover text-dark fixed-left"  ng-click="car()" style="border: solid #FF9671 3px;border-radius:10%;">Cars</a>
+          </div>      
         </nav>
       </header>
 

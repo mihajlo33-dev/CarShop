@@ -1,7 +1,9 @@
 from functools import wraps
+from idlelib import window
+
 from certifi import where
 from flask import Blueprint, jsonify, request, app, make_response
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, false
 
 from .models import brand,models,fuel,car,user
 from .methods import sqlExe, sqlAction, validateFields
@@ -31,7 +33,7 @@ def token_required(f):
 
       if 'x-access-tokens' in request.headers:
          token = request.headers['x-access-tokens']
-
+          
       if not token:
          return jsonify({'message': 'a valid token is missing'})
 
@@ -327,15 +329,14 @@ def get_user():
 def register_user():
     data = request.get_json()
 
-    if not validateFields(data, ["name", "password","admin"]):
+    if not validateFields(data, ["name", "password"]):
         return jsonify(success=False, message="Invalid form data")
 
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
     data = {
         "name": data["name"],
-        "password": hashed_password,
-        "admin": data["admin"]
+        "password": hashed_password
 
     }
 
