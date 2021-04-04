@@ -7,8 +7,7 @@
     <label for="psw"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="psw" ng-model="user.password" required>
 
-    <h1 ng-if="name != '' || paassword != '' ">{{user.name}} is logged in!</h1>
-    <h1 ng-if="name == '' || paassword == '' ">You haven't typed your name or password in yet!</h1>
+    
 
     <button type="submit" ng-click="submit()">Login</button>
     <label>
