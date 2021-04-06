@@ -1,32 +1,56 @@
-// routing system for the application
-// angularJS routing system works with views and controllers each separate route can have a diff HTML template (views directory)
-// and a diff Controller (app.controller)
+function hasToBeAdmin($q, $location) {
+    var deferred = $q.defer(); 
+    deferred.resolve();
+    debugger;
+    if (!localStorage.getItem("token") || localStorage.getItem("isAdmin") != "true") {
+        $location.path('/login_user');
+    }
+    return deferred.promise;
+}
+
+function hasToBeLoggedIn($q, $location) {
+    var deferred = $q.defer(); 
+    deferred.resolve();
+    if (!localStorage.getItem("token")) {
+        $location.path('/login_user');
+    }
+
+    return deferred.promise;
+}
+
 var app = angular.module('app', [], function ($routeProvider, $locationProvider) {
     $routeProvider
-        .when('/preview_brand/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewBrandController"})
-        .when('/edit_brand/:id', {templateUrl:"./views/brand_form.html", controller:"BrandModifyController"})
-        .when('/create_brand', { templateUrl: "./views/brand_form.html", controller: "BrandCreateController" })
-        .when('/brand', { templateUrl: "./views/defaultBrand.html", controller: "DefBrandController" })
-        .when('/preview_models/:id', {templateUrl:"./views/models_preview.html", controller:"PreviewModelsController"})
-        .when('/edit_models/:id', {templateUrl:"./views/models_form.html", controller:"ModelsModifyController"})
-        .when('/create_models', { templateUrl: "./views/models_form.html", controller: "ModelsCreateController" })
-        .when('/models', { templateUrl: "./views/defaultModels.html", controller: "DefModelsController" })
-        .when('/preview_fuel/:id', {templateUrl:"./views/fuel_preview.html", controller:"PreviewFuelController"})
-        .when('/edit_fuel/:id', {templateUrl:"./views/fuel_form.html", controller:"FuelModifyController"})
-        .when('/create_fuel', { templateUrl: "./views/fuel_form.html", controller: "FuelCreateController" })
-        .when('/fuel', { templateUrl: "./views/defaultFuel.html", controller: "DefFuelController" })
-        .when('/preview_car/:id', {templateUrl:"./views/car_preview.html", controller:"PreviewCarController"})
-        .when('/edit_car/:id', {templateUrl:"./views/car_form.html", controller:"CarModifyController"})
-        .when('/create_car', { templateUrl: "./views/car_form.html", controller: "CarCreateController" })
+        // for these routes the user has to be admin(hasToBeAdmin)
+        .when('/preview_brand/:id', {templateUrl:"./views/brand_preview.html", controller:"PreviewBrandController", resolve: { hasToBeAdmin }})
+        .when('/edit_brand/:id', {templateUrl:"./views/brand_form.html", controller:"BrandModifyController", resolve: { hasToBeAdmin }})
+        .when('/create_brand', { templateUrl: "./views/brand_form.html", controller: "BrandCreateController", resolve: { hasToBeAdmin } })
+        .when('/brand', { templateUrl: "./views/defaultBrand.html", controller: "DefBrandController", resolve: { hasToBeAdmin } })
+        .when('/preview_models/:id', {templateUrl:"./views/models_preview.html", controller:"PreviewModelsController", resolve: { hasToBeAdmin } })
+        .when('/edit_models/:id', {templateUrl:"./views/models_form.html", controller:"ModelsModifyController", resolve: { hasToBeAdmin } })
+        .when('/create_models', { templateUrl: "./views/models_form.html", controller: "ModelsCreateController", resolve: { hasToBeAdmin } })
+        .when('/models', { templateUrl: "./views/defaultModels.html", controller: "DefModelsController", resolve: { hasToBeAdmin } })
+        .when('/preview_fuel/:id', {templateUrl:"./views/fuel_preview.html", controller:"PreviewFuelController", resolve: { hasToBeAdmin }})
+        .when('/edit_fuel/:id', {templateUrl:"./views/fuel_form.html", controller:"FuelModifyController", resolve: { hasToBeAdmin }})
+        .when('/create_fuel', { templateUrl: "./views/fuel_form.html", controller: "FuelCreateController", resolve: { hasToBeAdmin } })
+        .when('/fuel', { templateUrl: "./views/defaultFuel.html", controller: "DefFuelController", resolve: { hasToBeAdmin } })
+        .when('/user', { templateUrl: "./views/defaultUser.html", controller: "DefUserController", resolve: { hasToBeAdmin } })
+
+        // for these routes the user has to be logged in(hasToBeLoggedIn)
+        .when('/preview_user/:id', {templateUrl:"./views/user_preview.html", controller:"PreviewUserController",resolve: { hasToBeLoggedIn }})
+        .when('/edit_user/:id', {templateUrl:"./views/user_form.html", controller:"UserModifyController",resolve: { hasToBeLoggedIn }})
+        .when('/edit_car/:id', {templateUrl:"./views/car_form.html", controller:"CarModifyController",resolve: { hasToBeLoggedIn }})
+        .when('/create_car', { templateUrl: "./views/car_form.html", controller: "CarCreateController",resolve: { hasToBeLoggedIn } })
+
+        // for these routes it can't be a guest user(guest)
         .when('/car', { templateUrl: "./views/defaultCar.html", controller: "DefCarController" })
-        .when('/preview_user/:id', {templateUrl:"./views/user_preview.html", controller:"PreviewUserController"})
-        .when('/edit_user/:id', {templateUrl:"./views/user_form.html", controller:"UserModifyController"})
+        .when('/preview_car/:id', {templateUrl:"./views/car_preview.html", controller:"PreviewCarController" })
         .when('/register_user', { templateUrl: "./views/user_register.html", controller: "UserRegisterController" })
-        .when('/user', { templateUrl: "./views/defaultUser.html", controller: "DefUserController" })
-        .when('/login_user', {templateUrl:"./views/user_login.html", controller:"UserLoginController"})
+        .when('/login_user', {templateUrl:"./views/user_login.html", controller:"UserLoginController" })
 
         
         .otherwise({ redirectTo: "/car" });
+
+
 
     $locationProvider.html5Mode(false);
 
@@ -760,6 +784,7 @@ app.controller('UserLoginController', function ($scope, $navigate, $user) {
         $user.login($scope.user).then(function(result) {
             console.log(result);
             localStorage.setItem("token",result.token)
+            localStorage.setItem("isAdmin",result.isAdmin)
             location.reload();
             // if(localStorage.getItem(result.token == "")){
             //     alert("User is not logged in,please try again!");

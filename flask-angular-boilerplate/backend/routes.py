@@ -329,14 +329,15 @@ def get_user():
 def register_user():
     data = request.get_json()
 
-    if not validateFields(data, ["name", "password"]):
+    if not validateFields(data, ["name", "password","admin"]):
         return jsonify(success=False, message="Invalid form data")
 
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
     data = {
         "name": data["name"],
-        "password": hashed_password
+        "password": hashed_password,
+        "admin": data["admin"]
 
     }
 
@@ -378,7 +379,7 @@ def login_user():
     if not validateFields(data, ["name", "password"]):
         return jsonify(success=False, message="Invalid form data")
 
-    userQuery = select([user.c.id, user.c.password]).where(user.c.name == data["name"])
+    userQuery = select([user.c.id, user.c.admin, user.c.password]).where(user.c.name == data["name"])
     loggedUser = sqlExe(userQuery, multiple=False)
 
     if not loggedUser:
@@ -386,7 +387,7 @@ def login_user():
 
     if check_password_hash(loggedUser["password"], data["password"]):
         token = jwt.encode({'id': loggedUser["id"], 'exp': datetime.utcnow() + timedelta(minutes=30)}, SECRET_KEY)
-        return jsonify(token=token, success=True)
+        return jsonify(token=token, success=True, isAdmin=loggedUser["admin"])
 
     return jsonify(success=False, message="Wrong password!")
 
