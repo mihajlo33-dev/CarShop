@@ -777,14 +777,14 @@ app.controller('UserLoginController', function ($scope, $navigate, $user) {
     $scope.init = function(){};
     $scope.user = { 
         "name":"",
-        "password":"",
+        "password":""
     };
     // $scope.isUserLoggedIn = true;
     $scope.submit = function() {
-        $user.login($scope.user).then(function(result) {
+        $user.login($scope.user).then(function(result,user) {
             console.log(result);
             localStorage.setItem("token",result.token)
-            localStorage.setItem("isAdmin",result.isAdmin)
+            localStorage.setItem("isAdmin",user.admin)
             location.reload();
             // if(localStorage.getItem(result.token == "")){
             //     alert("User is not logged in,please try again!");
