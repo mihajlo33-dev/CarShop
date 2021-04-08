@@ -76,6 +76,7 @@ function MainCtrl($scope, $route, $routeParams, $navigate, $location) {
     $scope.isUserLoggedIn = !!localStorage.getItem("token");
     $scope.logout = function(){
         localStorage.removeItem("token");
+        localStorage.removeItem("isAdmin");
         location.reload();
     }
     
@@ -784,7 +785,7 @@ app.controller('UserLoginController', function ($scope, $navigate, $user) {
         $user.login($scope.user).then(function(result,user) {
             console.log(result);
             localStorage.setItem("token",result.token)
-            localStorage.setItem("isAdmin",user.admin)
+            localStorage.setItem("isAdmin",result.isAdmin)
             location.reload();
             // if(localStorage.getItem(result.token == "")){
             //     alert("User is not logged in,please try again!");
