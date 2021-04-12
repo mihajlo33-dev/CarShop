@@ -67,6 +67,18 @@ function MainCtrl($scope, $route, $routeParams, $navigate, $location) {
     $scope.car = function() {
         $navigate.goTo("/#/car");
     }
+    $scope.brand = function() {
+        $navigate.goTo("/#/brand");
+    }
+    $scope.models = function() {
+        $navigate.goTo("/#/models");
+    }
+    $scope.fuel = function() {
+        $navigate.goTo("/#/fuel");
+    }
+    $scope.users = function() {
+        $navigate.goTo("/#/user");
+    }
     $scope.login = function() {
         $navigate.goTo("/#/login_user");
     }
@@ -89,9 +101,9 @@ function MainCtrl($scope, $route, $routeParams, $navigate, $location) {
 // home page controller (shows all the brands in the database)
 app.controller('DefBrandController', function ($scope, $navigate,$timeout,$brand) {
     $scope.brand = $brand.get();
-    $scope.filterText = "";
+    $scope.filterBrand = "";
     $scope.init = function() {
-        $brand.get($scope.filterText).then(function(result) {
+        $brand.get($scope.filterBrand).then(function(result) {
             $scope.brand = result;
         });
     }
@@ -214,9 +226,9 @@ app.controller('BrandModifyController', function ($scope, $navigate,$routeParams
 // home page controller (shows all the models in the database)
 app.controller('DefModelsController', function ($scope, $navigate,$timeout,$models) {
     $scope.models = $models.get();
-    $scope.filterText = "";
+    $scope.filterModels = "";
     $scope.init = function() {
-        $models.get($scope.filterText).then(function(result) {
+        $models.get($scope.filterModels).then(function(result) {
             $scope.models = result;
         });
     }
@@ -341,9 +353,9 @@ app.controller('ModelModifyController', function ($scope, $navigate, $models, $r
 // home page controller (shows all the fuel in the database)
 app.controller('DefFuelController', function ($scope, $navigate, $fuel, $timeout,) {
     $scope.fuel = $fuel.get();
-    $scope.filterText = "";
+    $scope.filterFuel = "";
     $scope.init = function() {
-        $fuel.get($scope.filterText).then(function(result) {
+        $fuel.get($scope.filterFuel).then(function(result) {
             $scope.fuel = result;
         });
     }
@@ -786,6 +798,7 @@ app.controller('UserLoginController', function ($scope, $navigate, $user) {
             console.log(result);
             localStorage.setItem("token",result.token)
             localStorage.setItem("isAdmin",result.isAdmin)
+            $navigate.goTo("/#/car");
             location.reload();
             // if(localStorage.getItem(result.token == "")){
             //     alert("User is not logged in,please try again!");
@@ -802,6 +815,8 @@ app.controller('UserLoginController', function ($scope, $navigate, $user) {
     }
     
 });
+
+
 
 
 

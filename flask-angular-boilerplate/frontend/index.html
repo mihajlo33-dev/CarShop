@@ -25,9 +25,12 @@
             <a class="navbar-brand hover text-dark" ng-click="register()" style="border: solid #FF9671 3px;border-radius:10%;">Register</a>
           </div>  
           <div class="topnav-right" ng-if="isUserLoggedIn == true">
+            <a class="navbar-brand hover text-dark fixed-left" ng-if="isAdmin == true" ng-click="brand()" style="border: solid #FF9671 3px;border-radius:10%;" >Brand</a>
+            <a class="navbar-brand hover text-dark fixed-left" ng-if="isAdmin == true" ng-click="models()" style="border: solid #FF9671 3px;border-radius:10%;" >Models</a>
+            <a class="navbar-brand hover text-dark fixed-left" ng-if="isAdmin == true" ng-click="fuel()" style="border: solid #FF9671 3px;border-radius:10%;" >Fuel</a>
+            <a class="navbar-brand hover text-dark fixed-left" ng-if="isAdmin == true" ng-click="users()" style="border: solid #FF9671 3px;border-radius:10%;" >Users</a>
             <a class="navbar-brand hover text-dark fixed-left"  ng-click="car()" style="border: solid #FF9671 3px;border-radius:10%;">Cars</a>
             <a class="navbar-brand hover text-dark fixed-left"  ng-click="logout()" style="border: solid #FF9671 3px;border-radius:10%;">Logout</a>
-
           </div>      
         </nav>
       </header>

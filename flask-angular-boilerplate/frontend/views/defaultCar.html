@@ -1,4 +1,30 @@
+<link rel="stylesheet" href="/css/index.css">
+
+<style>
+    .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 10px;
+    padding: 10px;
+    }
+
+    .grid-container > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+    }
+</style>
+
 <div ng-init="init()">
+    <div class="grid-container">
+        <input class="form-control" ng-model="filterBrand" ng-change='filter()'
+            placeholder="Search for specific brand"  />
+        <input class="form-control" ng-model="filterModels" ng-change='filter()'
+            placeholder="Search for specific model"  />
+        <input class="form-control" ng-model="filterFuel" ng-change='filter()'
+            placeholder="Search for specific fuel"  />
+    </div>
     <input class="form-control" ng-model="filterText" ng-change='filter()'
         placeholder="Search for specific car" style="margin-bottom: 5px" />
     <button ng-click="createCar()" type="button" class="btn btn-secondary" style="margin-bottom: 15px">Add new
@@ -14,3 +40,5 @@
         </div>
     </div>
 </div>
+
+
