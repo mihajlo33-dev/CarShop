@@ -7,5 +7,4 @@
 > From the relative directory 'backend' run: ```python models.py``` (this will initialize the DB)<br/>
 > Run the project from the base directory with ```python runserver.py```<br/>
 
-## Author
-* **Janez Sedeljsak** - [GitHub Profile](https://github.com/JanezSedeljsak)
+
